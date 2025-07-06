@@ -46,6 +46,7 @@ body {
 
 .center-placeholder-textarea {
   line-height: 1.5; /* 用户输入时的默认行高 */
+  text-align: left; /* 确保用户输入后文本左对齐 */
 }
 
 .center-placeholder-textarea:placeholder-shown {
