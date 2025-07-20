@@ -11,6 +11,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: "#3b82f6", // 蓝色，用于选中状态
       },
     },
   },

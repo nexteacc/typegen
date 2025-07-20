@@ -53,3 +53,25 @@ body {
   text-align: center;
   line-height: 180px; /* 根据容器高度微调以实现垂直居中 */
 }
+
+/* 发光边框效果 */
+.shadow-glow {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 
+              0 0 20px rgba(59, 130, 246, 0.3);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 
+                0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.7), 
+                0 0 25px rgba(59, 130, 246, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.5), 
+                0 0 20px rgba(59, 130, 246, 0.3);
+  }
+}
