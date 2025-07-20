@@ -46,7 +46,7 @@ export function FilterIcon({
           className="object-contain"
         />
       </div>
-      <span className="mt-2 text-[10px] text-center w-16">{filter.name}</span>
+      <span className="mt-2 text-xs text-center w-16">{filter.name}</span>
     </div>
   );
 }
@@ -67,7 +67,7 @@ export function FilterIconList({
   className?: string;
 }) {
   return (
-    <div className={cn('flex flex-nowrap gap-16 justify-between', className)}>
+    <div className={cn('flex flex-nowrap gap-8 justify-between', className)}>
       {filters.map(filter => (
         <FilterIcon
           key={filter.id}

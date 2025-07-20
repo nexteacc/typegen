@@ -75,3 +75,12 @@ body {
                 0 0 20px rgba(59, 130, 246, 0.3);
   }
 }
+/* 添加强
+制圆角样式 */
+.input-rounded {
+  border-radius: 16px !important;
+}
+
+.container-rounded {
+  border-radius: 20px !important;
+}

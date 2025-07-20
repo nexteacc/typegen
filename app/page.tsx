@@ -45,14 +45,19 @@ export default function Home() {
     <div className="flex flex-col items-center justify-center min-h-full w-full">
       <div className="relative w-[500px]" style={{ gap: '64px' }}>
         {/* 输入框容器 - 添加下边距 */}
-        <div className={cn(
-          "w-full h-[200px] bg-transparent flex items-center justify-center p-4 mb-16",
-          "border-2 border-dashed border-gray-300 rounded-lg transition-all duration-300",
-          state === "readyToTransform" && "border-solid border-blue-500 shadow-glow"
-        )}>
+        <div 
+          className={cn(
+            "w-full h-[200px] bg-transparent flex items-center justify-center p-4 mb-16",
+            "border-2 border-dashed border-gray-300 transition-all duration-300",
+            "container-rounded", // 使用自定义CSS类
+            state === "readyToTransform" && "border-solid border-blue-500 shadow-glow"
+          )}
+          style={{ borderRadius: '20px' }} // 添加内联样式作为备份
+        >
           <Input
             placeholder="paste text here"
-            className="w-full h-full border-none bg-transparent text-center center-placeholder-textarea"
+            className="w-full h-full border-none bg-transparent text-center center-placeholder-textarea input-rounded" // 使用自定义CSS类
+            style={{ borderRadius: '16px' }} // 添加内联样式作为备份
             value={text}
             onChange={handleTextChange}
           />

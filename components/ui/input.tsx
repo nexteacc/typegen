@@ -34,7 +34,7 @@ const Input = React.forwardRef<HTMLTextAreaElement, InputProps>(({ className, on
     <textarea
       ref={ref}
       className={cn(
-        "flex min-h-[40px] max-h-full w-full resize-none rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-0 focus:border-input disabled:cursor-not-allowed disabled:opacity-50 overflow-auto",
+        "flex min-h-[40px] max-h-full w-full resize-none rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-0 focus:border-input disabled:cursor-not-allowed disabled:opacity-50 overflow-auto",
         placeholderStyle,
         className
       )}
