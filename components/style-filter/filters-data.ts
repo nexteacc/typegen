@@ -24,7 +24,7 @@ export const styleFilters: StyleFilter[] = [
   {
     id: 'inverted-pyramid',
     name: 'Inverted Pyramid',
-    icon: '/icons/inverted-pyramid.svg',
+    icon: '/icons/inverted-pyramid.png',
     description: '倒金字塔结构，核心信息优先，适用于新闻和报告',
     apiParameter: 'inverted-pyramid',
     category: 'news'

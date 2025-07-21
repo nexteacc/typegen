@@ -51,9 +51,9 @@ export function FilterIconsContainer({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
-        className="px-4 py-8 rounded-xl bg-white/5 backdrop-blur-sm overflow-x-auto"
+        className="px-6 py-8 rounded-xl bg-white/5 backdrop-blur-sm overflow-visible"
       >
-        <div className="min-w-[600px] w-full">
+        <div className="min-w-[600px] w-full px-6"> {/* 增加内边距，确保图标有足够空间 */}
           <FilterIconList
             filters={styleFilters}
             selectedFilter={selectedFilter}
