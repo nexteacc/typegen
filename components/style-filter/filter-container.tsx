@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/utils/cn';
 import { StyleFilter, TransformerState } from './types';
@@ -9,6 +9,7 @@ import { FilterIconList } from './filter-icon';
 
 interface FilterIconsContainerProps {
   onFilterSelect?: (filter: StyleFilter) => void;
+  onSnapComplete?: (filter: StyleFilter) => void;
   selectedFilter?: StyleFilter | null;
   state: TransformerState;
   className?: string;
@@ -20,6 +21,7 @@ interface FilterIconsContainerProps {
  */
 export function FilterIconsContainer({
   onFilterSelect,
+  onSnapComplete,
   selectedFilter,
   state,
   className
@@ -58,6 +60,7 @@ export function FilterIconsContainer({
             filters={styleFilters}
             selectedFilter={selectedFilter}
             onSelectFilter={onFilterSelect}
+            onSnapComplete={onSnapComplete}
             className="justify-between"
           />
         </div>

@@ -5,11 +5,11 @@
 
 import { useRef, type PropsWithChildren } from 'react';
 import {
-  m,
+  motion as m,
   useAnimate,
   useMotionValue,
   useMotionValueEvent,
-} from 'motion/react';
+} from 'framer-motion';
 
 const DURATION_SECONDS = 0.6;
 const MAX_DISPLACEMENT = 300;

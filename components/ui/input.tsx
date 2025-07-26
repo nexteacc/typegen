@@ -2,7 +2,7 @@
 import * as React from "react";
 import { cn } from "@/utils/cn";
 
-export interface InputProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+export type InputProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
 /**
  * 自适应高度的输入框组件，类似 ChatGPT 输入体验。
