@@ -23,20 +23,16 @@ export default function Home() {
 
   // 处理文本输入
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setText(e.target.value);
+    const newText = e.target.value;
+    setText(newText);
 
-    // 根据需求文档：用户完成文本输入并等待约3秒后进入"可转换态"
-    if (e.target.value.trim() && state === "idle") {
-      // 3秒后自动进入可转换态
-      setTimeout(() => {
-        if (text.trim()) {
-          setState("readyToTransform");
-        }
-      }, 3000);
+    // 用户输入文本后立即进入"可转换态"
+    if (newText.trim() && state === "idle") {
+      setState("readyToTransform");
     }
 
     // 如果文本为空，重置状态为idle
-    if (!e.target.value.trim() && state !== "idle") {
+    if (!newText.trim() && state !== "idle") {
       setState("idle");
     }
   };
