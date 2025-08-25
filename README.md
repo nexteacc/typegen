@@ -49,9 +49,44 @@
 - **`center-placeholder-textarea`**: 一个自定义的 CSS 类，利用 `:placeholder-shown` 伪类实现了 placeholder 的居中显示，同时确保用户输入的文本左对齐。
 - **动态背景**: `background-wrapper` 类（虽然在当前页面未使用）展示了如何使用背景图片和阴影来创建更丰富的视觉效果。
 
+## API配置
+
+### OpenAI API集成
+
+本项目已集成真实的OpenAI API进行文本风格转换。要使用此功能，请按以下步骤配置：
+
+1. **获取OpenAI API密钥**
+   - 访问 [OpenAI Platform](https://platform.openai.com/account/api-keys)
+   - 创建新的API密钥
+
+2. **配置环境变量**
+   ```bash
+   cp .env.example .env.local
+   ```
+   
+   编辑 `.env.local` 文件，设置你的API密钥：
+   ```bash
+   OPENAI_API_KEY=sk-proj-your_api_key_here
+   ```
+
+3. **可选配置**
+   - `OPENAI_MODEL`: 使用的GPT模型 (默认: gpt-4o-mini)
+   - `OPENAI_MAX_TOKENS`: 最大token数 (默认: 2000)
+   - `OPENAI_TEMPERATURE`: 创造性参数 (默认: 0.7)
+   - `API_TIMEOUT`: API超时时间 (默认: 30秒)
+   - `API_MAX_RETRIES`: 最大重试次数 (默认: 3)
+
+### 支持的风格转换
+
+- **AP Style**: 美联社新闻风格
+- **X Style**: 社交媒体风格
+- **Inverted Pyramid**: 倒金字塔新闻结构
+- **Breaking News**: 突发新闻风格
+- **Academic**: 学术论文风格
+
 ## 未来可扩展方向
 
 - **功能增强**: 可以增加文本格式化、实时协作等功能。
-- **API 集成**: 可以将用户输入的文本发送到后端 API 进行处理，如文本分析、翻译或生成。
+- **更多风格**: 添加更多专业写作风格（商业邮件、创意写作、技术文档等）。
 - **状态管理**: 对于更复杂的应用，可以引入状态管理库，如 Zustand 或 Redux Toolkit。
 - **路由**: 可以添加更多的页面和路由，以构建一个功能更完整的应用。

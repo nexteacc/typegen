@@ -4,6 +4,8 @@ import { useState } from "react";
 import React from "react";
 import { StyleFilter, TransformerState, FilterIconsContainer } from "@/components/style-filter";
 import { TextBoxSnapEffect } from "@/components/style-filter/text-box-snap-effect";
+import { LightSweepEffect } from "@/components/style-filter/light-sweep-effect";
+import { TransformApiClient } from "@/lib/api-client";
 import { cn } from "@/utils/cn";
 
 
@@ -15,11 +17,22 @@ export default function Home() {
   const [selectedFilter, setSelectedFilter] = useState<StyleFilter | null>(null);
   const [droppedFilter, setDroppedFilter] = useState<StyleFilter | null>(null);
   const [isOver, setIsOver] = useState(false);
+  const [isLightScanning, setIsLightScanning] = useState(false);
+  const [originalText, setOriginalText] = useState<string>(""); // 保存原始文本
+  const [showResultActions, setShowResultActions] = useState(false); // 显示结果操作按钮
+  
+  // API客户端实例
+  const [apiClient] = useState(() => new TransformApiClient());
 
   // 监听 droppedFilter 状态变化
   React.useEffect(() => {
     console.log('🔄 droppedFilter state changed:', droppedFilter);
   }, [droppedFilter]);
+
+  // 监听光幕扫描状态变化
+  React.useEffect(() => {
+    console.log('🌟 isLightScanning state changed:', isLightScanning);
+  }, [isLightScanning]);
 
   // 处理文本输入
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -86,18 +99,87 @@ export default function Home() {
   const handleTextBoxSnapComplete = () => {
     console.log('Text box snap animation completed');
     setDroppedFilter(null); // 清除显示的滤镜图标
+    
+    // 立即启动光幕扫描动画
+    setIsLightScanning(true);
+  };
 
-    // 这里将来会触发下一阶段的动画（光幕扫描）
-    // 暂时模拟转换过程
-    setTimeout(() => {
-      setState("transformed");
-      // 这里可以添加实际的文本转换逻辑
-    }, 1500);
+  // 处理光幕扫描动画完成 - 集成API调用
+  const handleLightSweepComplete = async () => {
+    console.log('Light sweep animation completed');
+    setIsLightScanning(false);
+    
+    // 🔥 新增：调用API进行文本转换
+    if (text.trim() && selectedFilter) {
+      console.log('🚀 Starting API call for text transformation');
+      setState("transforming"); // 进入转换处理态
+      setOriginalText(text); // 保存原始文本
+      
+      try {
+        // 调用API转换文本
+        const result = await apiClient.transformText(text, selectedFilter.apiParameter);
+        
+        if (result.success && result.data) {
+          console.log('✅ API call successful:', result.data);
+          
+          // 转换成功，显示结果
+          setText(result.data.transformedText);
+          setState("transformed");
+          setShowResultActions(true);
+          
+          console.log(`🎉 Text transformed successfully in ${result.data.processingTime}ms`);
+        } else {
+          console.error('❌ API call failed:', result.error);
+          
+          // 转换失败，显示错误并回到可转换态
+          alert(`转换失败: ${result.error?.message || '未知错误'}`);
+          setState("readyToTransform");
+        }
+      } catch (error) {
+        console.error('❌ API call error:', error);
+        
+        // 网络错误等，显示错误并回到可转换态
+        alert(`网络错误: ${error.message}`);
+        setState("readyToTransform");
+      }
+    } else {
+      console.log('⚠️ No text or filter selected, skipping API call');
+      setState("readyToTransform");
+    }
   };
 
   // 处理底部滤镜图标的 snap 动画完成（保留用于测试按钮）
   const handleSnapComplete = (completedFilter: StyleFilter) => {
     console.log('Bottom filter snap animation completed for filter:', completedFilter.name);
+  };
+
+  // 🔥 新增：结果操作处理函数
+  const handleCopyText = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert('文本已复制到剪贴板！');
+    } catch (error) {
+      console.error('复制失败:', error);
+      alert('复制失败，请手动复制文本');
+    }
+  };
+
+  const handleTryOtherStyle = () => {
+    console.log('🔄 User wants to try other style');
+    setText(originalText); // 恢复原始文本
+    setState("readyToTransform");
+    setShowResultActions(false);
+    setSelectedFilter(null);
+  };
+
+  const handleRestart = () => {
+    console.log('🔄 User wants to restart');
+    setText("");
+    setOriginalText("");
+    setState("idle");
+    setShowResultActions(false);
+    setSelectedFilter(null);
+    setDroppedFilter(null);
   };
 
   const dropDisabled = state === "transforming" || state === "transformed";
@@ -106,42 +188,126 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full w-full">
-      <div className="relative w-[500px]" style={{ gap: '64px' }}>
-        {/* 文本输入容器 - 符合需求文档规范 */}
-        <div
-          className={cn(
-            "w-full h-[200px] bg-transparent flex items-center justify-center p-4 mb-16 relative",
-            "border-2 border-dashed border-gray-300 transition-all duration-300",
-            "container-rounded",
-            isOver && "border-solid border-blue-500 shadow-glow",
-            state === "readyToTransform" && "border-solid border-blue-500 shadow-glow",
-            state === "transforming" && "border-solid border-yellow-500 shadow-glow",
-            state === "transformed" && "border-solid border-green-500 shadow-glow"
-          )}
-          style={{ borderRadius: '20px' }}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-        >
-          <textarea
-            placeholder="paste text here"
-            className="w-full h-full border-none bg-transparent text-center center-placeholder-textarea input-rounded resize-none outline-none"
-            style={{ borderRadius: '16px' }}
-            value={text}
-            onChange={handleTextChange}
-            readOnly={state === "transforming" || state === "transformed"}
-          />
+      <div className={cn(
+        "relative transition-all duration-500",
+        state === "transformed" ? "w-[1000px]" : "w-[500px]"
+      )}>
+        {/* 转换前：单栏布局 */}
+        {state !== "transformed" && (
+          <div className="relative" style={{ gap: '64px' }}>
+            <div
+              className={cn(
+                "w-full h-[200px] bg-transparent flex items-center justify-center p-4 mb-16 relative",
+                "border-2 border-dashed border-gray-300 transition-all duration-300",
+                "container-rounded",
+                isOver && "border-solid border-blue-500 shadow-glow",
+                state === "readyToTransform" && "border-solid border-blue-500 shadow-glow",
+                state === "transforming" && "border-solid border-yellow-500 shadow-glow"
+              )}
+              style={{ borderRadius: '20px' }}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+            >
+              <textarea
+                placeholder="paste text here"
+                className="w-full h-full border-none bg-transparent text-center center-placeholder-textarea input-rounded resize-none outline-none"
+                style={{ borderRadius: '16px' }}
+                value={text}
+                onChange={handleTextChange}
+                readOnly={state === "transforming"}
+              />
 
-          {/* 在文本框内显示 snap 效果 */}
-          {droppedFilter && (
-            <TextBoxSnapEffect
-              filter={droppedFilter}
-              onComplete={handleTextBoxSnapComplete}
-            />
-          )}
-        </div>
+              {/* 在文本框内显示 snap 效果 */}
+              {droppedFilter && (
+                <TextBoxSnapEffect
+                  filter={droppedFilter}
+                  onComplete={handleTextBoxSnapComplete}
+                />
+              )}
+
+              {/* 光幕扫描效果 */}
+              <LightSweepEffect
+                isActive={isLightScanning}
+                onComplete={handleLightSweepComplete}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* 转换后：双栏对比布局 */}
+        {state === "transformed" && (
+          <div className="flex gap-8 mb-16">
+            {/* 原始文本区域 */}
+            <div className="flex-1">
+              <div className="mb-3 text-sm text-gray-500 font-medium text-center">
+                原始文本
+              </div>
+              <div className={cn(
+                "w-full h-[200px] bg-gray-50 flex items-center justify-center p-4 relative",
+                "border-2 border-gray-200 transition-all duration-300 container-rounded"
+              )}>
+                <textarea
+                  className="w-full h-full border-none bg-transparent text-left input-rounded resize-none outline-none text-gray-600"
+                  style={{ borderRadius: '16px' }}
+                  value={originalText}
+                  readOnly
+                />
+              </div>
+            </div>
+
+            {/* 转换箭头 */}
+            <div className="flex items-center justify-center">
+              <div className="text-3xl text-green-500 animate-pulse">
+                →
+              </div>
+            </div>
+
+            {/* 转换结果区域 */}
+            <div className="flex-1">
+              <div className="mb-3 text-sm text-green-600 font-medium text-center">
+                转换结果 ({selectedFilter?.name})
+              </div>
+              <div className={cn(
+                "w-full h-[200px] bg-transparent flex items-center justify-center p-4 relative",
+                "border-2 border-solid border-green-500 shadow-glow container-rounded"
+              )}>
+                <textarea
+                  className="w-full h-full border-none bg-transparent text-left input-rounded resize-none outline-none"
+                  style={{ borderRadius: '16px' }}
+                  value={text}
+                  readOnly
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
 
+
+        {/* 🔥 新增：结果操作按钮 */}
+        {showResultActions && state === "transformed" && (
+          <div className="mt-6 flex gap-3 justify-center">
+            <button
+              onClick={handleCopyText}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              📋 复制文本
+            </button>
+            <button
+              onClick={handleTryOtherStyle}
+              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+            >
+              🎨 尝试其他风格
+            </button>
+            <button
+              onClick={handleRestart}
+              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+            >
+              🔄 重新开始
+            </button>
+          </div>
+        )}
 
         {/* 滤镜图标容器 */}
         <div style={{ marginTop: '40px', width: '100%', overflow: 'visible' }}>

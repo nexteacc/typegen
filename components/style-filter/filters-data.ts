@@ -18,7 +18,7 @@ export const styleFilters: StyleFilter[] = [
     name: 'X Style',
     icon: '/icons/x-style.png',
     description: '社交媒体风格，简洁有力，适合在线传播',
-    apiParameter: 'twitter-style',
+    apiParameter: 'x-style',
     category: 'social'
   },
   {
