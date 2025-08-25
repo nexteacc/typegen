@@ -24,15 +24,6 @@ export default function Home() {
   // API客户端实例
   const [apiClient] = useState(() => new TransformApiClient());
 
-  // 监听 droppedFilter 状态变化
-  React.useEffect(() => {
-    console.log('🔄 droppedFilter state changed:', droppedFilter);
-  }, [droppedFilter]);
-
-  // 监听光幕扫描状态变化
-  React.useEffect(() => {
-    console.log('🌟 isLightScanning state changed:', isLightScanning);
-  }, [isLightScanning]);
 
   // 处理文本输入
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -63,13 +54,11 @@ export default function Home() {
     e.preventDefault(); // 允许拖放
     if (!isOver) {
       setIsOver(true);
-      console.log('🟠 Text container isOver = TRUE!');
     }
   };
 
   const handleDragLeave = () => {
     setIsOver(false);
-    console.log('⚪ Text container isOver = false');
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -80,24 +69,17 @@ export default function Home() {
     if (filterData) {
       const draggedFilter = JSON.parse(filterData) as StyleFilter;
 
-      console.log('✅ Dropped on text zone, filter:', draggedFilter);
       setSelectedFilter(draggedFilter);
 
       if (text.trim()) {
-        console.log('📝 Has text, setting state to transforming');
         setState("transforming");
-      } else {
-        console.log('⚠️ No text, but still triggering snap effect');
       }
-
-      console.log('🎬 About to set droppedFilter:', draggedFilter);
       setDroppedFilter(draggedFilter);
     }
   };
 
   // 处理文本框内 snap 动画完成
   const handleTextBoxSnapComplete = () => {
-    console.log('Text box snap animation completed');
     setDroppedFilter(null); // 清除显示的滤镜图标
     
     // 立即启动光幕扫描动画
@@ -106,12 +88,10 @@ export default function Home() {
 
   // 处理光幕扫描动画完成 - 集成API调用
   const handleLightSweepComplete = async () => {
-    console.log('Light sweep animation completed');
     setIsLightScanning(false);
     
-    // 🔥 新增：调用API进行文本转换
+    // 调用API进行文本转换
     if (text.trim() && selectedFilter) {
-      console.log('🚀 Starting API call for text transformation');
       setState("transforming"); // 进入转换处理态
       setOriginalText(text); // 保存原始文本
       
@@ -120,37 +100,29 @@ export default function Home() {
         const result = await apiClient.transformText(text, selectedFilter.apiParameter);
         
         if (result.success && result.data) {
-          console.log('✅ API call successful:', result.data);
-          
           // 转换成功，显示结果
           setText(result.data.transformedText);
           setState("transformed");
           setShowResultActions(true);
-          
-          console.log(`🎉 Text transformed successfully in ${result.data.processingTime}ms`);
         } else {
-          console.error('❌ API call failed:', result.error);
-          
           // 转换失败，显示错误并回到可转换态
           alert(`转换失败: ${result.error?.message || '未知错误'}`);
           setState("readyToTransform");
         }
-      } catch (error) {
-        console.error('❌ API call error:', error);
-        
+      } catch (error: unknown) {
         // 网络错误等，显示错误并回到可转换态
-        alert(`网络错误: ${error.message}`);
+        const err = error as { message?: string };
+        alert(`网络错误: ${err.message || '未知错误'}`);
         setState("readyToTransform");
       }
     } else {
-      console.log('⚠️ No text or filter selected, skipping API call');
       setState("readyToTransform");
     }
   };
 
-  // 处理底部滤镜图标的 snap 动画完成（保留用于测试按钮）
-  const handleSnapComplete = (completedFilter: StyleFilter) => {
-    console.log('Bottom filter snap animation completed for filter:', completedFilter.name);
+  // 处理底部滤镜图标的 snap 动画完成
+  const handleSnapComplete = () => {
+    // 动画完成逻辑
   };
 
   // 🔥 新增：结果操作处理函数
@@ -158,14 +130,12 @@ export default function Home() {
     try {
       await navigator.clipboard.writeText(text);
       alert('文本已复制到剪贴板！');
-    } catch (error) {
-      console.error('复制失败:', error);
+    } catch {
       alert('复制失败，请手动复制文本');
     }
   };
 
   const handleTryOtherStyle = () => {
-    console.log('🔄 User wants to try other style');
     setText(originalText); // 恢复原始文本
     setState("readyToTransform");
     setShowResultActions(false);
@@ -173,7 +143,6 @@ export default function Home() {
   };
 
   const handleRestart = () => {
-    console.log('🔄 User wants to restart');
     setText("");
     setOriginalText("");
     setState("idle");
@@ -181,9 +150,6 @@ export default function Home() {
     setSelectedFilter(null);
     setDroppedFilter(null);
   };
-
-  const dropDisabled = state === "transforming" || state === "transformed";
-
 
 
   return (

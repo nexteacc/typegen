@@ -29,7 +29,6 @@ export function FilterIcon({
 
   // 原生拖拽事件处理
   const handleDragStart = (e: React.DragEvent) => {
-    console.log('🚀 Native drag started:', filter.id);
     setIsDragging(true);
     
     // 设置拖拽数据
@@ -38,7 +37,6 @@ export function FilterIcon({
   };
 
   const handleDragEnd = () => {
-    console.log('🏁 Native drag ended:', filter.id);
     setIsDragging(false);
   };
 

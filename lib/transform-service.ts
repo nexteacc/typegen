@@ -25,7 +25,6 @@ export class TransformService {
       // 直接使用OpenAI服务进行转换
       return await this.openaiService.transform(text, style);
     } catch (error) {
-      console.error('Transform service error:', error);
       throw error;
     }
   }

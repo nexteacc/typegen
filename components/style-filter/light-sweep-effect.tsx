@@ -14,11 +14,8 @@ interface LightSweepEffectProps {
 export function LightSweepEffect({ isActive, onComplete }: LightSweepEffectProps) {
   useEffect(() => {
     if (isActive) {
-      console.log('🌟 Light sweep animation started');
-      
       // 0.8秒后动画完成
       const timer = setTimeout(() => {
-        console.log('✅ Light sweep animation completed');
         onComplete();
       }, 800);
       

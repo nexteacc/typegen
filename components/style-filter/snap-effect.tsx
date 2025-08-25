@@ -46,18 +46,10 @@ export const FilterSnapEffect = forwardRef<SnapEffectRef, SnapEffectProps>(
     });
 
     const triggerSnap = async (): Promise<void> => {
-      console.log('🎬 Snap effect triggerSnap called');
-      
       if (isAnimatingRef.current || !scope.current || !dissolveTargetRef.current) {
-        console.log('❌ Snap effect blocked:', {
-          isAnimating: isAnimatingRef.current,
-          hasScope: !!scope.current,
-          hasTarget: !!dissolveTargetRef.current
-        });
         return;
       }
       
-      console.log('✅ Starting snap animation');
       isAnimatingRef.current = true;
       scope.current.dataset.isAnimating = 'true';
 
@@ -83,8 +75,7 @@ export const FilterSnapEffect = forwardRef<SnapEffectRef, SnapEffectProps>(
             isAnimatingRef.current = false;
           }
         }, 500);
-      } catch (error) {
-        console.error('Snap animation error:', error);
+      } catch {
         isAnimatingRef.current = false;
         if (scope.current) {
           scope.current.dataset.isAnimating = 'false';

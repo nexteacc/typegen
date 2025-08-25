@@ -18,11 +18,6 @@ export async function POST(request: NextRequest) {
     // 解析请求体
     const requestData: TransformRequest = await request.json();
     
-    console.log('🔄 Transform API called:', {
-      textLength: requestData.text?.length,
-      style: requestData.style,
-      timestamp: new Date().toISOString()
-    });
 
     // 基本参数验证
     if (!requestData.text || !requestData.style) {
@@ -41,11 +36,6 @@ export async function POST(request: NextRequest) {
       requestData.style
     );
 
-    console.log('✅ Transform completed:', {
-      style: result.style,
-      processingTime: result.processingTime,
-      outputLength: result.transformedText.length
-    });
 
     // 返回成功响应
     return NextResponse.json({
@@ -53,20 +43,19 @@ export async function POST(request: NextRequest) {
       data: result
     } as TransformResponse);
 
-  } catch (error) {
-    console.error('❌ Transform API error:', error);
-    
+  } catch (error: unknown) {
     // 根据错误类型返回相应的错误码
+    const err = error as { message?: string };
     let errorCode = ApiErrorCode.INTERNAL_ERROR;
     let statusCode = 500;
     
-    if (error.message.includes('文本长度')) {
+    if (err.message?.includes('文本长度')) {
       errorCode = ApiErrorCode.TEXT_TOO_LONG;
       statusCode = 400;
-    } else if (error.message.includes('不支持的风格')) {
+    } else if (err.message?.includes('不支持的风格')) {
       errorCode = ApiErrorCode.UNSUPPORTED_STYLE;
       statusCode = 400;
-    } else if (error.message.includes('不能为空')) {
+    } else if (err.message?.includes('不能为空')) {
       errorCode = ApiErrorCode.INVALID_INPUT;
       statusCode = 400;
     }
@@ -75,7 +64,7 @@ export async function POST(request: NextRequest) {
       success: false,
       error: {
         code: errorCode,
-        message: error.message || '服务暂时不可用，请稍后重试'
+        message: err.message || '服务暂时不可用，请稍后重试'
       }
     } as TransformResponse, { status: statusCode });
   }

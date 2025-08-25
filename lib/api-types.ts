@@ -40,7 +40,7 @@ export interface TransformResponse {
   error?: {
     code: ApiErrorCode;
     message: string;
-    details?: any;
+    details?: Record<string, unknown>;
   };
 }
 

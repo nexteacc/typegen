@@ -4,7 +4,7 @@
  */
 
 import OpenAI from 'openai';
-import { TransformResult, SupportedStyle, SUPPORTED_STYLES, ApiErrorCode } from './api-types';
+import { TransformResult, SupportedStyle, SUPPORTED_STYLES } from './api-types';
 
 // 风格转换提示词模板
 const STYLE_PROMPTS: Record<SupportedStyle, string> = {
@@ -33,7 +33,7 @@ export class OpenAIService {
     
     // 验证API密钥配置
     if (!process.env.OPENAI_API_KEY) {
-      console.warn('⚠️ OpenAI API密钥未配置，请在.env.local文件中设置OPENAI_API_KEY');
+      throw new Error('OpenAI API密钥未配置，请在.env.local文件中设置OPENAI_API_KEY');
     }
   }
   
@@ -56,7 +56,6 @@ export class OpenAIService {
       // 构建完整提示词
       const fullPrompt = `${stylePrompt}\n\n原文:\n${text}\n\n转换后的文本:`;
       
-      console.log('🔄 Calling OpenAI API with style:', style);
       
       // 使用重试机制调用OpenAI API
       const response = await this.retryApiCall(async () => {
@@ -85,11 +84,6 @@ export class OpenAIService {
         throw new Error('API返回了空响应，请重试');
       }
       
-      console.log('✅ OpenAI API 响应成功:', {
-        promptTokens: response.usage?.prompt_tokens,
-        completionTokens: response.usage?.completion_tokens,
-        totalTokens: response.usage?.total_tokens,
-      });
       
       return {
         transformedText,
@@ -98,17 +92,16 @@ export class OpenAIService {
         processingTime: Date.now() - startTime
       };
       
-    } catch (error) {
-      console.error('❌ OpenAI API error:', error);
-      
+    } catch (error: unknown) {
       // 转换OpenAI API错误为应用错误
-      if (error.status === 429) {
+      const err = error as { status?: number };
+      if (err.status === 429) {
         throw new Error('API请求频率超限，请稍后再试');
-      } else if (error.status === 400) {
+      } else if (err.status === 400) {
         throw new Error('无效的API请求参数');
-      } else if (error.status === 401) {
+      } else if (err.status === 401) {
         throw new Error('OpenAI API密钥无效或已过期');
-      } else if (error.status === 500) {
+      } else if (err.status === 500) {
         throw new Error('OpenAI服务暂时不可用，请稍后再试');
       }
       
@@ -157,41 +150,41 @@ export class OpenAIService {
    * @returns API响应
    */
   private async retryApiCall<T>(apiCall: () => Promise<T>): Promise<T> {
-    let lastError: Error;
+    let lastError: unknown;
     
     for (let attempt = 1; attempt <= this.MAX_RETRIES; attempt++) {
       try {
-        console.log(`🔄 API调用尝试 ${attempt}/${this.MAX_RETRIES}`);
         return await apiCall();
-      } catch (error: any) {
+      } catch (error: unknown) {
         lastError = error;
-        console.warn(`⚠️ API调用失败 (${attempt}/${this.MAX_RETRIES}):`, error.message);
         
         // 如果是不可重试的错误，直接抛出
         if (this.isNonRetryableError(error)) {
-          console.log('🚫 不可重试错误，停止重试');
           throw error;
         }
         
         // 如果不是最后一次尝试，等待一段时间后重试
         if (attempt < this.MAX_RETRIES) {
           const delay = this.getRetryDelay(attempt);
-          console.log(`⏳ 等待 ${delay}ms 后重试...`);
           await new Promise(resolve => setTimeout(resolve, delay));
         }
       }
     }
     
-    console.error(`❌ 所有重试失败，抛出最后一次错误`);
     throw lastError;
   }
   
   /**
    * 检查是否为不可重试的错误
    */
-  private isNonRetryableError(error: any): boolean {
+  private isNonRetryableError(error: unknown): boolean {
+    if (!error || typeof error !== 'object') {
+      return false;
+    }
+    
+    const err = error as { status?: number };
     // 400系列错误通常不可重试（除了429限流）
-    if (error.status >= 400 && error.status < 500 && error.status !== 429) {
+    if (err.status && err.status >= 400 && err.status < 500 && err.status !== 429) {
       return true;
     }
     

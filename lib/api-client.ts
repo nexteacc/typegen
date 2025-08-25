@@ -21,11 +21,6 @@ export class TransformApiClient {
       style 
     };
 
-    console.log('🚀 API Client: Starting transform request', {
-      textLength: text.length,
-      style,
-      timestamp: new Date().toISOString()
-    });
 
     try {
       // 创建AbortController用于超时控制
@@ -51,27 +46,22 @@ export class TransformApiClient {
 
       const result: TransformResponse = await response.json();
       
-      console.log('✅ API Client: Transform request completed', {
-        success: result.success,
-        processingTime: result.data?.processingTime,
-        timestamp: new Date().toISOString()
-      });
 
       return result;
 
-    } catch (error) {
-      console.error('❌ API Client: Transform request failed', error);
-      
+    } catch (error: unknown) {
       // 处理不同类型的错误
-      if (error.name === 'AbortError') {
+      const err = error as { name?: string; message?: string };
+      
+      if (err.name === 'AbortError') {
         throw new Error('请求超时，请检查网络连接后重试');
       }
       
-      if (error.message.includes('Failed to fetch')) {
+      if (err.message && err.message.includes('Failed to fetch')) {
         throw new Error('网络连接失败，请检查网络后重试');
       }
       
-      throw new Error(`API调用失败: ${error.message}`);
+      throw new Error(`API调用失败: ${err.message || '未知错误'}`);
     }
   }
 
@@ -79,7 +69,7 @@ export class TransformApiClient {
    * 获取API健康状态
    * @returns API状态信息
    */
-  async getApiStatus(): Promise<any> {
+  async getApiStatus(): Promise<Record<string, unknown>> {
     try {
       const response = await fetch(`${this.baseUrl}/transform`, {
         method: 'GET'
@@ -91,7 +81,6 @@ export class TransformApiClient {
 
       return await response.json();
     } catch (error) {
-      console.error('API status check failed:', error);
       throw error;
     }
   }

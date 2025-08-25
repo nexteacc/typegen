@@ -40,8 +40,6 @@ export function TextBoxSnapEffect({ filter, onComplete }: TextBoxSnapEffectProps
     const triggerSnap = async () => {
       if (!scope.current || !dissolveTargetRef.current) return;
       
-      console.log('🎬 Text box snap effect starting for:', filter.name);
-      
       try {
         await Promise.all([
           animate(
@@ -52,10 +50,8 @@ export function TextBoxSnapEffect({ filter, onComplete }: TextBoxSnapEffectProps
           animate(displacement, MAX_DISPLACEMENT, transition)
         ]);
 
-        console.log('✅ Text box snap effect completed');
         onComplete();
-      } catch (error) {
-        console.error('Text box snap animation error:', error);
+      } catch {
         onComplete();
       }
     };
