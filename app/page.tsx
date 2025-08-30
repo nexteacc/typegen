@@ -6,6 +6,7 @@ import { StyleFilter, TransformerState, FilterIconsContainer } from "@/component
 import { TextBoxSnapEffect } from "@/components/style-filter/text-box-snap-effect";
 import { LightSweepEffect } from "@/components/style-filter/light-sweep-effect";
 import { TransformApiClient } from "@/lib/api-client";
+import { TextStats } from "@/components/text-stats";
 import { cn } from "@/utils/cn";
 
 
@@ -198,6 +199,14 @@ export default function Home() {
                 onComplete={handleLightSweepComplete}
               />
             </div>
+            
+            {/* 字数统计 - 输入框下方 */}
+            <TextStats 
+              text={text}
+              maxLength={5000}
+              className="mt-2 text-right"
+              showProgress={text.length > 4000} // 接近限制时显示进度条
+            />
           </div>
         )}
 
@@ -220,6 +229,13 @@ export default function Home() {
                   readOnly
                 />
               </div>
+              
+              {/* 原始文本字数统计 */}
+              <TextStats 
+                text={originalText}
+                className="mt-2 text-center"
+                compact={true}
+              />
             </div>
 
             {/* 转换箭头 */}
@@ -245,6 +261,13 @@ export default function Home() {
                   readOnly
                 />
               </div>
+              
+              {/* 转换结果字数统计 */}
+              <TextStats 
+                text={text}
+                className="mt-2 text-center"
+                compact={true}
+              />
             </div>
           </div>
         )}
