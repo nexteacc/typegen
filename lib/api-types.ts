@@ -56,11 +56,26 @@ export enum ApiErrorCode {
 
 // 支持的风格类型
 export const SUPPORTED_STYLES = [
+  // 原有风格
   'ap-style',
   'x-style', 
   'inverted-pyramid',
   'breaking-news',
-  'academic'
+  'academic',
+  
+  // 新增风格
+  '4chan-style',
+  'buzzfeed-style',
+  'call-to-action',
+  'citation-heavy',
+  'fomo-driven',
+  'hashtag-heavy',
+  'headline-driven',
+  'imrd-style',
+  'investigative',
+  'meme-style',
+  'passive-voice',
+  'threaded-post'
 ] as const;
 
 export type SupportedStyle = typeof SUPPORTED_STYLES[number];

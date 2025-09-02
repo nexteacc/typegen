@@ -90,7 +90,7 @@ export function FilterIcon({
 
 /**
  * 风格滤镜图标列表组件
- * 显示多个风格滤镜图标
+ * 显示多个风格滤镜图标，支持多行布局
  */
 export function FilterIconList({
   filters,
@@ -104,15 +104,42 @@ export function FilterIconList({
   onSnapComplete?: (filter: StyleFilter) => void;
   className?: string;
 }) {
+  // 将滤镜分组显示：第一行5个，后续每行6个
+  const firstRowFilters = filters.slice(0, 5);  // 原有5个风格
+  const remainingFilters = filters.slice(5);    // 新增的风格
+  
+  // 将剩余的滤镜按每行6个分组
+  const groupedRemainingFilters: StyleFilter[][] = [];
+  for (let i = 0; i < remainingFilters.length; i += 6) {
+    groupedRemainingFilters.push(remainingFilters.slice(i, i + 6));
+  }
+
   return (
-    <div className={cn('flex flex-nowrap gap-10 justify-between', className)}>
-      {filters.map(filter => (
-        <FilterIcon
-          key={filter.id}
-          filter={filter}
-          onClick={onSelectFilter}
-          onSnapComplete={onSnapComplete}
-        />
+    <div className={cn('space-y-6', className)}>
+      {/* 第一行：原有5个风格 */}
+      <div className="flex flex-nowrap gap-10 justify-between">
+        {firstRowFilters.map(filter => (
+          <FilterIcon
+            key={filter.id}
+            filter={filter}
+            onClick={onSelectFilter}
+            onSnapComplete={onSnapComplete}
+          />
+        ))}
+      </div>
+      
+      {/* 后续行：新增的风格，每行6个 */}
+      {groupedRemainingFilters.map((rowFilters, rowIndex) => (
+        <div key={`row-${rowIndex}`} className="flex flex-wrap gap-8 justify-center">
+          {rowFilters.map(filter => (
+            <FilterIcon
+              key={filter.id}
+              filter={filter}
+              onClick={onSelectFilter}
+              onSnapComplete={onSnapComplete}
+            />
+          ))}
+        </div>
       ))}
     </div>
   );

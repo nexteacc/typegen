@@ -53,15 +53,14 @@ export function FilterIconsContainer({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
-        className="px-6 py-8 rounded-xl bg-white/5 backdrop-blur-sm overflow-visible"
+        className="px-8 py-10 rounded-xl bg-white/5 backdrop-blur-sm overflow-visible"
       >
-        <div className="min-w-[600px] w-full px-6"> {/* 增加内边距，确保图标有足够空间 */}
+        <div className="max-w-[800px] w-full mx-auto"> {/* 调整容器宽度以适应多行布局 */}
           <FilterIconList
             filters={styleFilters}
             selectedFilter={selectedFilter}
             onSelectFilter={onFilterSelect}
             onSnapComplete={onSnapComplete}
-            className="justify-between"
           />
         </div>
       </motion.div>

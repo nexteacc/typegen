@@ -8,11 +8,26 @@ import { TransformResult, SupportedStyle, SUPPORTED_STYLES } from './api-types';
 
 // 风格转换提示词模板
 const STYLE_PROMPTS: Record<SupportedStyle, string> = {
+  // 原有风格
   'ap-style': 'Transform the following text into AP Style journalism. Maintain objectivity, conciseness, and directness, focusing on factual accuracy with clear headlines and structure.',
   'x-style': 'Transform the following text into social media X (Twitter) style. Make it concise and powerful, add relevant hashtags, use short paragraphs and emojis to enhance expression.',
   'inverted-pyramid': 'Rewrite the following text using the inverted pyramid structure for news. Put the most important information at the beginning, followed by secondary details and background information. Make it suitable for quick reading and understanding.',
   'breaking-news': 'Transform the following text into breaking news style. Use urgent and timely language, short and concise paragraphs, emphasizing the immediacy and importance of the event.',
-  'academic': 'Transform the following text into academic style. Use formal language, professional terminology, clear structure and argumentation, focusing on citations and evidence support, as well as expressions commonly used in academia.'
+  'academic': 'Transform the following text into academic style. Use formal language, professional terminology, clear structure and argumentation, focusing on citations and evidence support, as well as expressions commonly used in academia.',
+  
+  // 新增风格
+  '4chan-style': 'Transform the following text into 4chan/anonymous forum style. Use direct, unfiltered language with internet slang, be brutally honest, and adopt the irreverent tone typical of anonymous imageboards.',
+  'buzzfeed-style': 'Transform the following text into BuzzFeed style. Create catchy, clickbait headlines with numbers or superlatives, use conversational tone, add personality and humor, make it shareable and engaging.',
+  'call-to-action': 'Transform the following text into a compelling call-to-action style. Use persuasive language, create urgency, include action verbs, and motivate readers to take specific steps.',
+  'citation-heavy': 'Transform the following text into citation-heavy academic style. Include numerous references to authoritative sources, use formal citations format, emphasize evidence-based arguments and scholarly credibility.',
+  'fomo-driven': 'Transform the following text into FOMO (Fear of Missing Out) driven style. Create urgency and scarcity, emphasize exclusive opportunities, use time-sensitive language to motivate immediate action.',
+  'hashtag-heavy': 'Transform the following text into hashtag-heavy social media style. Add numerous relevant hashtags, make it trend-worthy, use popular social media conventions and maximize discoverability.',
+  'headline-driven': 'Transform the following text into headline-driven content. Focus on creating multiple compelling headlines, use attention-grabbing techniques, optimize for click-through rates and engagement.',
+  'imrd-style': 'Transform the following text into IMRD (Introduction, Methods, Results, Discussion) academic paper format. Structure content with clear sections, use scientific writing conventions and systematic presentation.',
+  'investigative': 'Transform the following text into investigative journalism style. Focus on in-depth research, present evidence systematically, use investigative techniques, maintain objectivity while revealing important findings.',
+  'meme-style': 'Transform the following text into internet meme style. Use humor, references to popular culture, informal language, and make it relatable and shareable in online communities.',
+  'passive-voice': 'Transform the following text into passive voice academic style. Use passive constructions, maintain objectivity, focus on actions rather than actors, suitable for formal scientific writing.',
+  'threaded-post': 'Transform the following text into Twitter thread style. Break content into connected tweets, use thread conventions like "1/n", maintain flow between posts while respecting character limits.'
 };
 
 export class OpenAIService {
