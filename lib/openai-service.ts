@@ -7,27 +7,28 @@ import OpenAI from 'openai';
 import { TransformResult, SupportedStyle, SUPPORTED_STYLES } from './api-types';
 
 // 风格转换提示词模板
+// 原则：知名标准化风格使用简洁指令，特殊要求风格提供详细指导
 const STYLE_PROMPTS: Record<SupportedStyle, string> = {
-  // 原有风格
-  'ap-style': 'Transform the following text into AP Style journalism. Maintain objectivity, conciseness, and directness, focusing on factual accuracy with clear headlines and structure.',
-  'x-style': 'Transform the following text into social media X (Twitter) style. Make it concise and powerful, add relevant hashtags, use short paragraphs and emojis to enhance expression.',
-  'inverted-pyramid': 'Rewrite the following text using the inverted pyramid structure for news. Put the most important information at the beginning, followed by secondary details and background information. Make it suitable for quick reading and understanding.',
-  'breaking-news': 'Transform the following text into breaking news style. Use urgent and timely language, short and concise paragraphs, emphasizing the immediacy and importance of the event.',
-  'academic': 'Transform the following text into academic style. Use formal language, professional terminology, clear structure and argumentation, focusing on citations and evidence support, as well as expressions commonly used in academia.',
+  // 原有风格 - 已优化
+  'ap-style': 'Transform into AP Style journalism.',
+  'x-style': 'Transform into social media X (Twitter) style with hashtags and emojis.',
+  'inverted-pyramid': 'Rewrite using inverted pyramid structure: most important information first, then supporting details.',
+  'breaking-news': 'Transform into breaking news style with urgent, immediate language.',
+  'academic': 'Transform into academic writing style.',
   
-  // 新增风格
-  '4chan-style': 'Transform the following text into 4chan/anonymous forum style. Use direct, unfiltered language with internet slang, be brutally honest, and adopt the irreverent tone typical of anonymous imageboards.',
-  'buzzfeed-style': 'Transform the following text into BuzzFeed style. Create catchy, clickbait headlines with numbers or superlatives, use conversational tone, add personality and humor, make it shareable and engaging.',
-  'call-to-action': 'Transform the following text into a compelling call-to-action style. Use persuasive language, create urgency, include action verbs, and motivate readers to take specific steps.',
-  'citation-heavy': 'Transform the following text into citation-heavy academic style. Include numerous references to authoritative sources, use formal citations format, emphasize evidence-based arguments and scholarly credibility.',
-  'fomo-driven': 'Transform the following text into FOMO (Fear of Missing Out) driven style. Create urgency and scarcity, emphasize exclusive opportunities, use time-sensitive language to motivate immediate action.',
-  'hashtag-heavy': 'Transform the following text into hashtag-heavy social media style. Add numerous relevant hashtags, make it trend-worthy, use popular social media conventions and maximize discoverability.',
-  'headline-driven': 'Transform the following text into headline-driven content. Focus on creating multiple compelling headlines, use attention-grabbing techniques, optimize for click-through rates and engagement.',
-  'imrd-style': 'Transform the following text into IMRD (Introduction, Methods, Results, Discussion) academic paper format. Structure content with clear sections, use scientific writing conventions and systematic presentation.',
-  'investigative': 'Transform the following text into investigative journalism style. Focus on in-depth research, present evidence systematically, use investigative techniques, maintain objectivity while revealing important findings.',
-  'meme-style': 'Transform the following text into internet meme style. Use humor, references to popular culture, informal language, and make it relatable and shareable in online communities.',
-  'passive-voice': 'Transform the following text into passive voice academic style. Use passive constructions, maintain objectivity, focus on actions rather than actors, suitable for formal scientific writing.',
-  'threaded-post': 'Transform the following text into Twitter thread style. Break content into connected tweets, use thread conventions like "1/n", maintain flow between posts while respecting character limits.'
+  // 新增风格 - 平衡简洁与必要指导
+  '4chan-style': 'Transform into 4chan/anonymous forum style with internet slang and direct tone.',
+  'buzzfeed-style': 'Transform into BuzzFeed style.',
+  'call-to-action': 'Transform into compelling call-to-action style with action verbs and urgency.',
+  'citation-heavy': 'Transform into citation-heavy academic style with numerous references.',
+  'fomo-driven': 'Transform into FOMO (Fear of Missing Out) style with urgency and scarcity language.',
+  'hashtag-heavy': 'Transform into hashtag-heavy social media style with numerous relevant hashtags.',
+  'headline-driven': 'Transform into headline-driven content with attention-grabbing techniques.',
+  'imrd-style': 'Transform into IMRD format: Introduction, Methods, Results, Discussion sections.',
+  'investigative': 'Transform into investigative journalism style.',
+  'meme-style': 'Transform into internet meme style with humor and pop culture references.',
+  'passive-voice': 'Transform into passive voice academic style using passive constructions.',
+  'threaded-post': 'Transform into Twitter thread style with "1/n" format and connected posts.'
 };
 
 export class OpenAIService {
@@ -48,7 +49,7 @@ export class OpenAIService {
 
     // 验证API密钥配置
     if (!process.env.OPENAI_API_KEY) {
-      throw new Error('OpenAI API密钥未配置，请在.env.local文件中设置OPENAI_API_KEY');
+      throw new Error('OpenAI API key is not configured. Please set OPENAI_API_KEY in .env.local file.');
     }
   }
 
@@ -110,7 +111,7 @@ Transformed text:`;
 
       // 处理空响应
       if (!transformedText) {
-        throw new Error('API返回了空响应，请重试');
+        throw new Error('API returned an empty response. Please try again.');
       }
 
       // 简单记录转换信息，用于监控和调试
@@ -132,13 +133,13 @@ Transformed text:`;
       // 转换OpenAI API错误为应用错误
       const err = error as { status?: number };
       if (err.status === 429) {
-        throw new Error('API请求频率超限，请稍后再试');
+        throw new Error('API request rate limit exceeded. Please try again later.');
       } else if (err.status === 400) {
-        throw new Error('无效的API请求参数');
+        throw new Error('Invalid API request parameters.');
       } else if (err.status === 401) {
-        throw new Error('OpenAI API密钥无效或已过期');
+        throw new Error('OpenAI API key is invalid or has expired.');
       } else if (err.status === 500) {
-        throw new Error('OpenAI服务暂时不可用，请稍后再试');
+        throw new Error('OpenAI service is temporarily unavailable. Please try again later.');
       }
 
       // 重新抛出原始错误
@@ -152,17 +153,17 @@ Transformed text:`;
   private validateInput(text: string, style: string): void {
     // 检查文本是否为空
     if (!text || text.trim().length === 0) {
-      throw new Error('文本内容不能为空');
+      throw new Error('Text content cannot be empty');
     }
 
     // 检查文本长度
     if (text.length > this.MAX_TEXT_LENGTH) {
-      throw new Error(`文本长度不能超过 ${this.MAX_TEXT_LENGTH} 个字符`);
+      throw new Error(`Text length cannot exceed ${this.MAX_TEXT_LENGTH} characters`);
     }
 
     // 检查风格是否支持
     if (!SUPPORTED_STYLES.includes(style as SupportedStyle)) {
-      throw new Error(`不支持的风格类型: ${style}`);
+      throw new Error(`Unsupported style type: ${style}`);
     }
   }
 
