@@ -6,7 +6,7 @@ import { StyleFilter, TransformerState, FilterIconsContainer } from "@/component
 import { TextBoxSnapEffect } from "@/components/style-filter/text-box-snap-effect";
 import { LightSweepEffect } from "@/components/style-filter/light-sweep-effect";
 import { TransformApiClient } from "@/lib/api-client";
-import { TextStats } from "@/components/text-stats";
+import { LengthControl } from "@/components/length-control";
 import { cn } from "@/utils/cn";
 
 
@@ -21,6 +21,7 @@ export default function Home() {
   const [isLightScanning, setIsLightScanning] = useState(false);
   const [originalText, setOriginalText] = useState<string>(""); // 保存原始文本
   const [showResultActions, setShowResultActions] = useState(false); // 显示结果操作按钮
+  const [targetLength, setTargetLength] = useState<number>(0); // 目标字数
   
   // API客户端实例
   const [apiClient] = useState(() => new TransformApiClient());
@@ -97,8 +98,12 @@ export default function Home() {
       setOriginalText(text); // 保存原始文本
       
       try {
-        // 调用API转换文本
-        const result = await apiClient.transformText(text, selectedFilter.apiParameter);
+        // 调用API转换文本（包含字数控制）
+        const result = await apiClient.transformText(
+          text, 
+          selectedFilter.apiParameter, 
+          targetLength > 0 ? targetLength : undefined
+        );
         
         if (result.success && result.data) {
           // 转换成功，显示结果
@@ -200,13 +205,25 @@ export default function Home() {
               />
             </div>
             
-            {/* 字数统计 - 输入框下方 */}
-            <TextStats 
-              text={text}
-              maxLength={5000}
-              className="mt-2 text-right"
-              showProgress={text.length > 4000} // 接近限制时显示进度条
-            />
+            {/* 字数统计 - 输入框下方中央 */}
+            <div className="mt-2 text-center">
+              <span className={cn(
+                "text-xs transition-colors",
+                text.length > 5000 ? "text-red-500 font-medium" : "text-gray-400"
+              )}>
+                {text.length}/5000
+              </span>
+            </div>
+            
+            {/* 字数控制滑动条 - 字数统计下方 */}
+            {text.trim() && (
+              <LengthControl
+                originalLength={text.length}
+                value={targetLength}
+                onChange={setTargetLength}
+                className="mt-4"
+              />
+            )}
           </div>
         )}
 
@@ -229,13 +246,6 @@ export default function Home() {
                   readOnly
                 />
               </div>
-              
-              {/* 原始文本字数统计 */}
-              <TextStats 
-                text={originalText}
-                className="mt-2 text-center"
-                compact={true}
-              />
             </div>
 
             {/* 转换箭头 */}
@@ -261,13 +271,6 @@ export default function Home() {
                   readOnly
                 />
               </div>
-              
-              {/* 转换结果字数统计 */}
-              <TextStats 
-                text={text}
-                className="mt-2 text-center"
-                compact={true}
-              />
             </div>
           </div>
         )}

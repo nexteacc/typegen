@@ -13,12 +13,14 @@ export class TransformApiClient {
    * 转换文本风格
    * @param text 原始文本
    * @param style 目标风格
+   * @param targetLength 目标字数(可选)
    * @returns 转换结果
    */
-  async transformText(text: string, style: string): Promise<TransformResponse> {
+  async transformText(text: string, style: string, targetLength?: number): Promise<TransformResponse> {
     const requestData: TransformRequest = { 
       text: text.trim(), 
-      style 
+      style,
+      ...(targetLength && targetLength > 0 && { targetLength })
     };
 
 

@@ -9,6 +9,8 @@ export interface TransformRequest {
   text: string;
   /** 目标风格参数 */
   style: string;
+  /** 目标字数(可选) */
+  targetLength?: number;
   /** 可选配置参数 */
   options?: {
     /** 最大文本长度限制 */

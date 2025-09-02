@@ -57,9 +57,10 @@ export class OpenAIService {
    * 执行文本风格转换
    * @param text 原始文本
    * @param style 目标风格
+   * @param targetLength 目标字数(可选)
    * @returns 转换结果
    */
-  async transform(text: string, style: string): Promise<TransformResult> {
+  async transform(text: string, style: string, targetLength?: number): Promise<TransformResult> {
     const startTime = Date.now();
 
     try {
@@ -69,8 +70,13 @@ export class OpenAIService {
       // 获取风格提示词
       const stylePrompt = this.getStylePrompt(style as SupportedStyle);
 
-      // 构建完整提示词 - 让模型自动检测并保持原语言
-      const fullPrompt = `${stylePrompt}
+      // 构建完整提示词 - 包含风格和字数控制
+      let lengthInstruction = '';
+      if (targetLength && targetLength > 0) {
+        lengthInstruction = `\n\nLENGTH REQUIREMENT: The output should be approximately ${targetLength} characters or less. Adjust the content accordingly while maintaining the core message and style.`;
+      }
+      
+      const fullPrompt = `${stylePrompt}${lengthInstruction}
 
 CRITICAL INSTRUCTION: You MUST respond in the EXACT SAME LANGUAGE as the input text below. Do not translate, do not change the language. Only transform the writing style while preserving the original language completely.
 

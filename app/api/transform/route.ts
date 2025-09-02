@@ -30,10 +30,11 @@ export async function POST(request: NextRequest) {
       } as TransformResponse, { status: 400 });
     }
 
-    // 调用转换服务
+    // 调用转换服务（包含字数控制）
     const result = await transformService.transform(
       requestData.text, 
-      requestData.style
+      requestData.style,
+      requestData.targetLength
     );
 
 

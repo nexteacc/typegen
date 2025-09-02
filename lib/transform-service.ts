@@ -18,12 +18,13 @@ export class TransformService {
    * 执行文本风格转换
    * @param text 原始文本
    * @param style 目标风格
+   * @param targetLength 目标字数(可选)
    * @returns 转换结果
    */
-  async transform(text: string, style: string): Promise<TransformResult> {
+  async transform(text: string, style: string, targetLength?: number): Promise<TransformResult> {
     try {
-      // 直接使用OpenAI服务进行转换
-      return await this.openaiService.transform(text, style);
+      // 直接使用OpenAI服务进行转换（包含字数控制）
+      return await this.openaiService.transform(text, style, targetLength);
     } catch (error) {
       throw error;
     }

@@ -104,15 +104,10 @@ export function FilterIconList({
   onSnapComplete?: (filter: StyleFilter) => void;
   className?: string;
 }) {
-  // 将滤镜分组显示：第一行5个，后续每行6个
-  const firstRowFilters = filters.slice(0, 5);  // 原有5个风格
-  const remainingFilters = filters.slice(5);    // 新增的风格
-  
-  // 将剩余的滤镜按每行6个分组
-  const groupedRemainingFilters: StyleFilter[][] = [];
-  for (let i = 0; i < remainingFilters.length; i += 6) {
-    groupedRemainingFilters.push(remainingFilters.slice(i, i + 6));
-  }
+  // 将滤镜分组显示：第一行5个，第二行8个，第三行4个
+  const firstRowFilters = filters.slice(0, 5);   // 原有5个风格
+  const secondRowFilters = filters.slice(5, 13); // 第二行8个
+  const thirdRowFilters = filters.slice(13);     // 第三行剩余的
 
   return (
     <div className={cn('space-y-6', className)}>
@@ -128,10 +123,10 @@ export function FilterIconList({
         ))}
       </div>
       
-      {/* 后续行：新增的风格，每行6个 */}
-      {groupedRemainingFilters.map((rowFilters, rowIndex) => (
-        <div key={`row-${rowIndex}`} className="flex flex-wrap gap-8 justify-center">
-          {rowFilters.map(filter => (
+      {/* 第二行：8个新增风格 */}
+      {secondRowFilters.length > 0 && (
+        <div className="flex flex-wrap gap-6 justify-center">
+          {secondRowFilters.map(filter => (
             <FilterIcon
               key={filter.id}
               filter={filter}
@@ -140,7 +135,21 @@ export function FilterIconList({
             />
           ))}
         </div>
-      ))}
+      )}
+      
+      {/* 第三行：剩余的风格 */}
+      {thirdRowFilters.length > 0 && (
+        <div className="flex flex-wrap gap-6 justify-center">
+          {thirdRowFilters.map(filter => (
+            <FilterIcon
+              key={filter.id}
+              filter={filter}
+              onClick={onSelectFilter}
+              onSnapComplete={onSnapComplete}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
