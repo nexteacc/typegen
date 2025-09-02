@@ -16,8 +16,8 @@ interface FilterIconsContainerProps {
 }
 
 /**
- * 风格滤镜图标容器组件
- * 显示底部的滤镜图标区域
+ * Style filter icons container component
+ * Displays the bottom filter icons area
  */
 export function FilterIconsContainer({
   onFilterSelect,
@@ -26,14 +26,10 @@ export function FilterIconsContainer({
   state,
   className
 }: FilterIconsContainerProps) {
-  // 始终显示滤镜图标，不再基于状态条件
-
-  // 当状态为 readyToTransform 时显示提示文本
   const shouldShowHint = state === 'readyToTransform';
 
   return (
     <div className={cn('w-full', className)}>
-      {/* 条件渲染提示文本，使用 AnimatePresence 处理进出动画 */}
       <AnimatePresence>
         {shouldShowHint && (
           <motion.div
@@ -43,19 +39,18 @@ export function FilterIconsContainer({
             transition={{ duration: 0.3 }}
             className="text-center text-sm text-gray-500 mb-4"
           >
-            拖动滤镜到文本框应用风格转换
+            Drag a filter to the text box to apply style transformation
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* 始终显示滤镜图标容器 */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.1 }}
         className="px-8 py-10 rounded-xl bg-white/5 backdrop-blur-sm overflow-visible"
       >
-        <div className="max-w-[800px] w-full mx-auto"> {/* 调整容器宽度以适应多行布局 */}
+        <div className="max-w-[800px] w-full mx-auto">
           <FilterIconList
             filters={styleFilters}
             selectedFilter={selectedFilter}

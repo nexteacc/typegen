@@ -1,15 +1,12 @@
 "use client"
 
 import { useState } from "react";
-import React from "react";
 import { StyleFilter, TransformerState, FilterIconsContainer } from "@/components/style-filter";
 import { TextBoxSnapEffect } from "@/components/style-filter/text-box-snap-effect";
 import { LightSweepEffect } from "@/components/style-filter/light-sweep-effect";
 import { TransformApiClient } from "@/lib/api-client";
 import { LengthControl } from "@/components/length-control";
 import { cn } from "@/utils/cn";
-
-
 
 export default function Home() {
   // 状态管理
@@ -19,41 +16,32 @@ export default function Home() {
   const [droppedFilter, setDroppedFilter] = useState<StyleFilter | null>(null);
   const [isOver, setIsOver] = useState(false);
   const [isLightScanning, setIsLightScanning] = useState(false);
-  const [originalText, setOriginalText] = useState<string>(""); // 保存原始文本
-  const [showResultActions, setShowResultActions] = useState(false); // 显示结果操作按钮
-  const [targetLength, setTargetLength] = useState<number>(0); // 目标字数
-  
-  // API客户端实例
+  const [originalText, setOriginalText] = useState<string>("");
+  const [showResultActions, setShowResultActions] = useState(false);
+  const [targetLength, setTargetLength] = useState<number>(0);
   const [apiClient] = useState(() => new TransformApiClient());
-
 
   // 处理文本输入
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
     setText(newText);
 
-    // 用户输入文本后立即进入"可转换态"
     if (newText.trim() && state === "idle") {
       setState("readyToTransform");
     }
-
-    // 如果文本为空，重置状态为idle
     if (!newText.trim() && state !== "idle") {
       setState("idle");
     }
   };
 
-  // 处理滤镜选择
   const handleFilterSelect = () => {
-    // 仍然设置状态为 readyToTransform，以便显示提示文本
     if (text.trim()) {
       setState("readyToTransform");
     }
   };
 
-  // 原生拖拽事件处理
   const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault(); // 允许拖放
+    e.preventDefault();
     if (!isOver) {
       setIsOver(true);
     }
@@ -80,25 +68,19 @@ export default function Home() {
     }
   };
 
-  // 处理文本框内 snap 动画完成
   const handleTextBoxSnapComplete = () => {
-    setDroppedFilter(null); // 清除显示的滤镜图标
-    
-    // 立即启动光幕扫描动画
+    setDroppedFilter(null);
     setIsLightScanning(true);
   };
 
-  // 处理光幕扫描动画完成 - 集成API调用
   const handleLightSweepComplete = async () => {
     setIsLightScanning(false);
     
-    // 调用API进行文本转换
     if (text.trim() && selectedFilter) {
-      setState("transforming"); // 进入转换处理态
-      setOriginalText(text); // 保存原始文本
+      setState("transforming");
+      setOriginalText(text);
       
       try {
-        // 调用API转换文本（包含字数控制）
         const result = await apiClient.transformText(
           text, 
           selectedFilter.apiParameter, 
@@ -106,19 +88,16 @@ export default function Home() {
         );
         
         if (result.success && result.data) {
-          // 转换成功，显示结果
           setText(result.data.transformedText);
           setState("transformed");
           setShowResultActions(true);
         } else {
-          // 转换失败，显示错误并回到可转换态
-          alert(`转换失败: ${result.error?.message || '未知错误'}`);
+          alert(`Transform failed: ${result.error?.message || 'Unknown error'}`);
           setState("readyToTransform");
         }
       } catch (error: unknown) {
-        // 网络错误等，显示错误并回到可转换态
         const err = error as { message?: string };
-        alert(`网络错误: ${err.message || '未知错误'}`);
+        alert(`Network error: ${err.message || 'Unknown error'}`);
         setState("readyToTransform");
       }
     } else {
@@ -126,23 +105,20 @@ export default function Home() {
     }
   };
 
-  // 处理底部滤镜图标的 snap 动画完成
-  const handleSnapComplete = () => {
-    // 动画完成逻辑
-  };
+  const handleSnapComplete = () => {};
 
-  // 🔥 新增：结果操作处理函数
+  // 结果操作处理函数
   const handleCopyText = async () => {
     try {
       await navigator.clipboard.writeText(text);
-      alert('文本已复制到剪贴板！');
+      alert('Text copied to clipboard!');
     } catch {
-      alert('复制失败，请手动复制文本');
+      alert('Copy failed, please copy text manually');
     }
   };
 
   const handleTryOtherStyle = () => {
-    setText(originalText); // 恢复原始文本
+    setText(originalText);
     setState("readyToTransform");
     setShowResultActions(false);
     setSelectedFilter(null);
@@ -156,7 +132,6 @@ export default function Home() {
     setSelectedFilter(null);
     setDroppedFilter(null);
   };
-
 
   return (
     <div className="flex flex-col items-center justify-center min-h-full w-full">
@@ -190,22 +165,19 @@ export default function Home() {
                 readOnly={state === "transforming"}
               />
 
-              {/* 在文本框内显示 snap 效果 */}
-              {droppedFilter && (
-                <TextBoxSnapEffect
-                  filter={droppedFilter}
-                  onComplete={handleTextBoxSnapComplete}
-                />
-              )}
-
-              {/* 光幕扫描效果 */}
-              <LightSweepEffect
-                isActive={isLightScanning}
-                onComplete={handleLightSweepComplete}
+            {droppedFilter && (
+              <TextBoxSnapEffect
+                filter={droppedFilter}
+                onComplete={handleTextBoxSnapComplete}
               />
+            )}
+
+            <LightSweepEffect
+              isActive={isLightScanning}
+              onComplete={handleLightSweepComplete}
+            />
             </div>
             
-            {/* 字数统计 - 输入框下方中央 */}
             <div className="mt-2 text-center">
               <span className={cn(
                 "text-xs transition-colors",
@@ -215,7 +187,6 @@ export default function Home() {
               </span>
             </div>
             
-            {/* 字数控制滑动条 - 字数统计下方 */}
             {text.trim() && (
               <LengthControl
                 originalLength={text.length}
@@ -227,13 +198,11 @@ export default function Home() {
           </div>
         )}
 
-        {/* 转换后：双栏对比布局 */}
         {state === "transformed" && (
           <div className="flex gap-8 mb-16">
-            {/* 原始文本区域 */}
             <div className="flex-1">
               <div className="mb-3 text-sm text-gray-500 font-medium text-center">
-                原始文本
+                Original Text
               </div>
               <div className={cn(
                 "w-full h-[200px] bg-gray-50 flex items-center justify-center p-4 relative",
@@ -248,17 +217,14 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 转换箭头 */}
             <div className="flex items-center justify-center">
               <div className="text-3xl text-green-500 animate-pulse">
                 →
               </div>
             </div>
-
-            {/* 转换结果区域 */}
             <div className="flex-1">
               <div className="mb-3 text-sm text-green-600 font-medium text-center">
-                转换结果 ({selectedFilter?.name})
+                Transformed Result ({selectedFilter?.name})
               </div>
               <div className={cn(
                 "w-full h-[200px] bg-transparent flex items-center justify-center p-4 relative",
@@ -275,28 +241,26 @@ export default function Home() {
           </div>
         )}
 
-
-
-        {/* 🔥 新增：结果操作按钮 */}
+        {/* 结果操作按钮 */}
         {showResultActions && state === "transformed" && (
           <div className="mt-6 flex gap-3 justify-center">
             <button
               onClick={handleCopyText}
               className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
-              📋 复制文本
+              📋 Copy Text
             </button>
             <button
               onClick={handleTryOtherStyle}
               className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
             >
-              🎨 尝试其他风格
+              🎨 Try Other Style
             </button>
             <button
               onClick={handleRestart}
               className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
             >
-              🔄 重新开始
+              🔄 Restart
             </button>
           </div>
         )}

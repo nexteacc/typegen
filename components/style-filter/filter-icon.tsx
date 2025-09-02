@@ -64,7 +64,6 @@ export function FilterIcon({
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
         onClick={handleClick}
-        title={filter.description}
         className="flex flex-col items-center justify-center cursor-grab active:cursor-grabbing"
         style={{
           opacity: isDragging ? 0.5 : 1,

@@ -75,7 +75,7 @@ export function LengthControl({
     <div className={cn('w-full space-y-1', className)}>
       {/* 标题和数字输入 - 紧凑化 */}
       <div className="flex items-center justify-between text-xs">
-        <span className="text-gray-600">目标字数:</span>
+        <span className="text-gray-600">Target Length:</span>
         <div className="flex items-center gap-1">
           <input
             type="number"
@@ -86,7 +86,7 @@ export function LengthControl({
             onChange={handleInputChange}
             className="w-16 px-1 py-0.5 text-right border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
-          <span className="text-gray-500 text-xs">字</span>
+          <span className="text-gray-500 text-xs">chars</span>
           <span className={cn("text-xs", getSliderColor())}>
             ({percentage}%)
           </span>
@@ -107,17 +107,17 @@ export function LengthControl({
         
         {/* 范围标签 */}
         <div className="flex justify-between text-xs text-gray-400 mt-0.5">
-          <span>{min}字</span>
-          <span>{max}字</span>
+          <span>{min} chars</span>
+          <span>{max} chars</span>
         </div>
       </div>
 
       {/* 状态指示 - 紧凑化 */}
       <div className="text-xs text-gray-500 text-center">
-        {ratio < 0.5 && '📝 精简版'}
-        {ratio >= 0.5 && ratio < 0.8 && '📋 摘要版'} 
-        {ratio >= 0.8 && ratio <= 1.2 && '📄 标准版'}
-        {ratio > 1.2 && '📚 详细版'}
+        {ratio < 0.5 && '📝 Concise'}
+        {ratio >= 0.5 && ratio < 0.8 && '📋 Summary'} 
+        {ratio >= 0.8 && ratio <= 1.2 && '📄 Standard'}
+        {ratio > 1.2 && '📚 Detailed'}
       </div>
     </div>
   );
