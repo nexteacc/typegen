@@ -6,9 +6,13 @@ import { TextBoxSnapEffect } from "@/components/style-filter/text-box-snap-effec
 import { LightSweepEffect } from "@/components/style-filter/light-sweep-effect";
 import { TransformApiClient } from "@/lib/api-client";
 import { LengthControl } from "@/components/length-control";
+import { LanguageToggle } from "@/components/language-toggle";
+import { useTranslation } from "@/lib/use-translation";
 import { cn } from "@/utils/cn";
 
 export default function Home() {
+  const { t } = useTranslation();
+  
   // 状态管理
   const [text, setText] = useState<string>("");
   const [state, setState] = useState<TransformerState>("idle");
@@ -92,12 +96,12 @@ export default function Home() {
           setState("transformed");
           setShowResultActions(true);
         } else {
-          alert(`Transform failed: ${result.error?.message || 'Unknown error'}`);
+          alert(`${t('transformFailed')}: ${result.error?.message || t('unknownError')}`);
           setState("readyToTransform");
         }
       } catch (error: unknown) {
         const err = error as { message?: string };
-        alert(`Network error: ${err.message || 'Unknown error'}`);
+        alert(`${t('networkError')}: ${err.message || t('unknownError')}`);
         setState("readyToTransform");
       }
     } else {
@@ -111,9 +115,9 @@ export default function Home() {
   const handleCopyText = async () => {
     try {
       await navigator.clipboard.writeText(text);
-      alert('Text copied to clipboard!');
+      alert(t('copySuccess'));
     } catch {
-      alert('Copy failed, please copy text manually');
+      alert(t('copyFailed'));
     }
   };
 
@@ -135,6 +139,10 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen w-full">
+      {/* 语言切换按钮 - 右上角 */}
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageToggle />
+      </div>
       {/* 主内容区域 - 减少flex-1的影响，添加固定间距 */}
       <div className="flex flex-col items-center justify-center px-8 py-16 flex-grow"> {/* 使用py-16代替pb-12，flex-grow代替flex-1 */}
         <div className={cn(
@@ -159,7 +167,7 @@ export default function Home() {
                 onDrop={handleDrop}
               >
                 <textarea
-                  placeholder="paste text here"
+                  placeholder={t('pasteTextHere')}
                   className="w-full h-full border-none bg-transparent text-center center-placeholder-textarea input-rounded resize-none outline-none"
                   style={{ borderRadius: '16px' }}
                   value={text}
@@ -205,7 +213,7 @@ export default function Home() {
             <div className="flex gap-8">
               <div className="flex-1">
                 <div className="mb-3 text-sm text-gray-500 font-medium text-center">
-                  Original Text
+                  {t('originalText')}
                 </div>
                 <div className={cn(
                   "w-full h-[200px] bg-gray-50 flex items-center justify-center p-4 relative",
@@ -228,7 +236,7 @@ export default function Home() {
               
               <div className="flex-1">
                 <div className="mb-3 text-sm text-green-600 font-medium text-center">
-                  Transformed Result ({selectedFilter?.name})
+                  {t('transformedResult')} ({selectedFilter?.name})
                 </div>
                 <div className={cn(
                   "w-full h-[200px] bg-transparent flex items-center justify-center p-4 relative",
@@ -252,19 +260,19 @@ export default function Home() {
                 onClick={handleCopyText}
                 className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
               >
-                📋 Copy Text
+                {t('copyText')}
               </button>
               <button
                 onClick={handleTryOtherStyle}
                 className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
               >
-                🎨 Try Other Style
+                {t('tryOtherStyle')}
               </button>
               <button
                 onClick={handleRestart}
                 className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
               >
-                🔄 Restart
+                {t('restart')}
               </button>
             </div>
           )}
@@ -273,7 +281,7 @@ export default function Home() {
         {/* 提示信息 */}
         {state === 'readyToTransform' && (
           <div className="mt-8 text-center text-sm text-gray-500">
-            Drag a filter from the toolbar below to transform your text
+            {t('dragFilterHint')}
           </div>
         )}
       </div>

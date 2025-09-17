@@ -6,6 +6,7 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from '@/lib/use-translation';
 import { cn } from '@/utils/cn';
 
 interface LengthControlProps {
@@ -34,6 +35,8 @@ export function LengthControl({
   step = 50,
   className
 }: LengthControlProps) {
+  const { t } = useTranslation();
+  
   // 内部状态，默认值为原文长度
   const [currentValue, setCurrentValue] = useState(value ?? originalLength);
 
@@ -75,7 +78,7 @@ export function LengthControl({
     <div className={cn('w-full space-y-1', className)}>
       {/* 标题和数字输入 - 紧凑化 */}
       <div className="flex items-center justify-between text-xs">
-        <span className="text-gray-600">Target Length:</span>
+        <span className="text-gray-600">{t('targetLength')}:</span>
         <div className="flex items-center gap-1">
           <input
             type="number"
@@ -86,7 +89,7 @@ export function LengthControl({
             onChange={handleInputChange}
             className="w-16 px-1 py-0.5 text-right border border-gray-300 rounded text-xs focus:outline-none focus:ring-1 focus:ring-blue-500"
           />
-          <span className="text-gray-500 text-xs">chars</span>
+          <span className="text-gray-500 text-xs">{t('chars')}</span>
           <span className={cn("text-xs", getSliderColor())}>
             ({percentage}%)
           </span>
@@ -107,17 +110,17 @@ export function LengthControl({
         
         {/* 范围标签 */}
         <div className="flex justify-between text-xs text-gray-400 mt-0.5">
-          <span>{min} chars</span>
-          <span>{max} chars</span>
+          <span>{min} {t('chars')}</span>
+          <span>{max} {t('chars')}</span>
         </div>
       </div>
 
       {/* 状态指示 - 紧凑化 */}
       <div className="text-xs text-gray-500 text-center">
-        {ratio < 0.5 && '📝 Concise'}
-        {ratio >= 0.5 && ratio < 0.8 && '📋 Summary'} 
-        {ratio >= 0.8 && ratio <= 1.2 && '📄 Standard'}
-        {ratio > 1.2 && '📚 Detailed'}
+        {ratio < 0.5 && t('concise')}
+        {ratio >= 0.5 && ratio < 0.8 && t('summary')} 
+        {ratio >= 0.8 && ratio <= 1.2 && t('standard')}
+        {ratio > 1.2 && t('detailed')}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { StyleFilter, TransformerState } from './types';
-import { getFiltersByCategory } from './filters-data';
+import { useLocalizedCategories } from '@/lib/use-localized-categories';
 import { CategorizedFilterToolbar } from './categorized-filter-toolbar';
 
 interface FilterIconsContainerProps {
@@ -24,51 +24,8 @@ export function FilterIconsContainer({
   state,
   className
 }: FilterIconsContainerProps) {
-  // 按功能分类组织滤镜
-  const categories = React.useMemo(() => [
-    {
-      id: 'style-news',
-      name: 'Style · News & Academic',
-      emoji: '📰',
-      filters: getFiltersByCategory('style-news')
-    },
-    {
-      id: 'style-social',
-      name: 'Style · Social Platforms',
-      emoji: '📱',
-      filters: getFiltersByCategory('style-social')
-    },
-    {
-      id: 'style-creative',
-      name: 'Style · Creative Writing',
-      emoji: '✍️',
-      filters: getFiltersByCategory('style-creative')
-    },
-    {
-      id: 'structure-news',
-      name: 'Structure · News Frames',
-      emoji: '🧱',
-      filters: getFiltersByCategory('structure-news')
-    },
-    {
-      id: 'structure-list',
-      name: 'Structure · Lists & Threads',
-      emoji: '🧩',
-      filters: getFiltersByCategory('structure-list')
-    },
-    {
-      id: 'structure-academic',
-      name: 'Structure · Academic Flow',
-      emoji: '📑',
-      filters: getFiltersByCategory('structure-academic')
-    },
-    {
-      id: 'strategy',
-      name: 'Strategy & Controls',
-      emoji: '🎯',
-      filters: getFiltersByCategory('strategy')
-    }
-  ], []);
+  // 使用本地化的类别数据
+  const categories = useLocalizedCategories();
 
   return (
     <CategorizedFilterToolbar
