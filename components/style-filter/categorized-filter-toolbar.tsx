@@ -50,9 +50,9 @@ export function CategorizedFilterToolbar({
             className="flex items-center"
           >
             {/* 类别标签 - 缩小宽度 */}
-            <div className="flex items-center w-20 mr-4 flex-shrink-0">
+            <div className="flex items-center w-20 mr-6 flex-shrink-0">
               <span className="text-sm mr-1">{category.emoji}</span>
-              <span className="text-[11px] font-medium text-gray-600 whitespace-nowrap">
+              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
                 {category.name}
               </span>
             </div>
