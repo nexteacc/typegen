@@ -27,28 +27,46 @@ export function FilterIconsContainer({
   // 按功能分类组织滤镜
   const categories = React.useMemo(() => [
     {
-      id: 'news',
-      name: 'News',
+      id: 'style-news',
+      name: 'Style · News & Academic',
       emoji: '📰',
-      filters: getFiltersByCategory('news')
+      filters: getFiltersByCategory('style-news')
     },
     {
-      id: 'academic',
-      name: 'Academic',
-      emoji: '🎓',
-      filters: getFiltersByCategory('academic')
-    },
-    {
-      id: 'social',
-      name: 'Social',
+      id: 'style-social',
+      name: 'Style · Social Platforms',
       emoji: '📱',
-      filters: getFiltersByCategory('social')
+      filters: getFiltersByCategory('style-social')
     },
     {
-      id: 'marketing',
-      name: 'Marketing',
-      emoji: '📈',
-      filters: getFiltersByCategory('marketing')
+      id: 'style-creative',
+      name: 'Style · Creative Writing',
+      emoji: '✍️',
+      filters: getFiltersByCategory('style-creative')
+    },
+    {
+      id: 'structure-news',
+      name: 'Structure · News Frames',
+      emoji: '🧱',
+      filters: getFiltersByCategory('structure-news')
+    },
+    {
+      id: 'structure-list',
+      name: 'Structure · Lists & Threads',
+      emoji: '🧩',
+      filters: getFiltersByCategory('structure-list')
+    },
+    {
+      id: 'structure-academic',
+      name: 'Structure · Academic Flow',
+      emoji: '📑',
+      filters: getFiltersByCategory('structure-academic')
+    },
+    {
+      id: 'strategy',
+      name: 'Strategy & Controls',
+      emoji: '🎯',
+      filters: getFiltersByCategory('strategy')
     }
   ], []);
 

@@ -7,28 +7,45 @@ import OpenAI from 'openai';
 import { TransformResult, SupportedStyle, SUPPORTED_STYLES } from './api-types';
 
 // 风格转换提示词模板
-// 原则：知名标准化风格使用简洁指令，特殊要求风格提供详细指导
+// 原则：为每类风格提供明确的写作指令，确保模型输出符合目标语气与结构
 const STYLE_PROMPTS: Record<SupportedStyle, string> = {
-  // 原有风格 - 已优化
-  'ap-style': 'Transform into AP Style journalism.',
-  'x-style': 'Transform into social media X (Twitter) style with hashtags and emojis.',
-  'inverted-pyramid': 'Rewrite using inverted pyramid structure: most important information first, then supporting details.',
-  'breaking-news': 'Transform into breaking news style with urgent, immediate language.',
-  'academic': 'Transform into academic writing style.',
-  
-  // 新增风格 - 平衡简洁与必要指导
-  '4chan-style': 'Transform into 4chan/anonymous forum style with internet slang and direct tone.',
-  'buzzfeed-style': 'Transform into BuzzFeed style.',
-  'call-to-action': 'Transform into compelling call-to-action style with action verbs and urgency.',
-  'citation-heavy': 'Transform into citation-heavy academic style with numerous references.',
-  'fomo-driven': 'Transform into FOMO (Fear of Missing Out) style with urgency and scarcity language.',
-  'hashtag-heavy': 'Transform into hashtag-heavy social media style with numerous relevant hashtags.',
-  'headline-driven': 'Transform into headline-driven content with attention-grabbing techniques.',
-  'imrd-style': 'Transform into IMRD format: Introduction, Methods, Results, Discussion sections.',
-  'investigative': 'Transform into investigative journalism style.',
-  'meme-style': 'Transform into internet meme style with humor and pop culture references.',
-  'passive-voice': 'Transform into passive voice academic style using passive constructions.',
-  'threaded-post': 'Transform into Twitter thread style with "1/n" format and connected posts.'
+  // Style · 新闻 / 学术 / 教科书
+  'ap-style': 'Rewrite into AP Style journalism with concise, objective sentences and an inverted-pyramid lead.',
+  'apa-style': 'Rewrite into APA style academic prose with in-text citations, formal tone, and structured paragraphs.',
+  'ieee-style': 'Rewrite into IEEE style technical writing with numbered references, passive voice, and precise terminology.',
+  'textbook-style': 'Rewrite into textbook style exposition with neutral voice, clear definitions, and stepwise explanations.',
+  'investigative': 'Rewrite into investigative journalism style that foregrounds evidence, sourcing, and analytical depth.',
+
+  // Style · 社群 / 平台文化
+  '4chan-style': 'Rewrite into 4chan style commentary with blunt tone, internet slang, and irreverent humor.',
+  'reddit-style': 'Rewrite into Reddit style discussion with conversational tone, quoted replies, and community references.',
+  'buzzfeed-style': 'Rewrite into BuzzFeed style storytelling with catchy hooks, pop-culture riffs, and upbeat pacing.',
+  'twitter-style': 'Rewrite into Twitter style posts with punchy sentences, relevant hashtags, and emoji for emphasis.',
+  'instagram-caption': 'Rewrite into Instagram caption style with evocative imagery, emoji, and engagement prompts.',
+  'meme-style': 'Rewrite into meme style banter with witty punchlines, pop-culture references, and playful formatting.',
+
+  // Style · 小说 / 创意写作
+  'hemingway-style': 'Rewrite into Hemingway style narrative with short declarative sentences and vivid verbs.',
+
+  // Structure 系列
+  'inverted-pyramid': 'Rewrite into inverted-pyramid structure that leads with core facts before supporting detail.',
+  'headline-driven': 'Rewrite into headline-driven structure with striking titles supported by concise blurbs.',
+  'listicle': 'Rewrite into listicle structure using numbered or bulleted entries with strong subheadings.',
+  'threaded': 'Rewrite into threaded structure with numbered segments (1/n) that build a connected narrative.',
+  'how-to': 'Rewrite into how-to structure with a clear goal followed by step-by-step instructions.',
+  'bullet-pointed': 'Rewrite into bullet-pointed structure that surfaces key insights per bullet.',
+  'imrd-style': 'Rewrite into IMRaD structure with distinct Introduction, Methods, Results, and Discussion sections.',
+
+  // Strategy & Controls
+  'clickbait': 'Adjust the text with clickbait techniques that create curiosity gaps and bold promises.',
+  'call-to-action': 'Adjust the text with strong calls to action that use imperative verbs and outcome-oriented phrasing.',
+  'seo-optimized': 'Adjust the text for SEO with strategic keyword placement, descriptive subheadings, and meta-friendly flow.',
+  'fomo-driven': 'Adjust the text to trigger FOMO with urgency cues, scarcity language, and social proof.',
+  'hashtag-heavy': 'Adjust the text to include dense hashtag usage aligned with trending topics and niche communities.',
+  'emoji-laden': 'Adjust the text to incorporate abundant emoji that reinforce tone and emotion while staying readable.',
+  'flesch-kincaid': 'Adjust the text to an accessible Flesch-Kincaid reading level with shorter sentences and simpler vocabulary.',
+  'citation-heavy': 'Adjust the text to be citation-heavy with explicit references to authoritative sources and data.',
+  'technical-jargon': 'Adjust the text to use dense technical jargon appropriate for specialist audiences and expert readers.'
 };
 
 export class OpenAIService {

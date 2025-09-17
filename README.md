@@ -1,92 +1,174 @@
-# 项目总结：TypeGen
+# TypeGen - 智能文本风格转换工具
 
-这是一个基于 Next.js 的现代化 Web 应用，旨在提供一个简洁、美观的文本输入界面。项目利用了最新的前端技术栈，实现了响应式布局和动态主题切换，为用户提供了流畅的输入体验。
+TypeGen 是一个基于 Next.js 的现代化 AI 驱动文本风格转换应用。通过集成 OpenAI API，提供多维度的写作风格、结构模板与策略参数之间的智能转换，并配备直观的拖拽式交互界面。
 
-## 技术栈
+## 🎯 核心功能
 
-- **框架**: [Next.js](https://nextjs.org/) 15.2.0 (使用 Turbopack 进行开发)
+### 智能文本转换
+- **AI 驱动**: 集成 OpenAI GPT-4o-mini 进行真实的文本风格转换
+- **28 种风格滤镜**: 覆盖写作语体、结构骨架、传播策略三大维度
+- **智能字数控制**: 支持目标长度设置，从简洁摘要到详细展开
+- **实时转换**: 快速响应的 API 处理，提供流畅用户体验
+
+### 直观交互设计
+- **拖拽式操作**: 将风格滤镜拖拽至文本框即可开始转换
+- **视觉反馈**: 丰富的动画效果和状态指示
+- **对比展示**: 转换前后双栏对比布局
+- **一键操作**: 复制结果、尝试其他风格、重新开始
+
+## 🛠️ 技术架构
+
+### 前端技术栈
+- **框架**: [Next.js](https://nextjs.org/) 15.5.0 (使用 Turbopack 进行开发)
 - **UI 库**: [React](https://reactjs.org/) 19.0.0
-- **样式**: [Tailwind CSS](https://tailwindcss.com/) 4.1.11
-- **UI 组件**: 自定义组件，灵感来自 [shadcn/ui](https://ui.shadcn.com/)，并使用了 `clsx` 和 `tailwind-merge` 进行样式合并。
-- **动画**: [Motion One](https://motion.dev/)，一个轻量级的动画库。
-- **语言**: [TypeScript](https://www.typescriptlang.org/) 5
+- **样式系统**: [Tailwind CSS](https://tailwindcss.com/) 4.1.11
+- **动画库**: [Framer Motion](https://www.framer.com/motion/) 12.23.6
+- **类型安全**: [TypeScript](https://www.typescriptlang.org/) 5
 - **包管理器**: [pnpm](https://pnpm.io/)
 
-## 配置文件
+### 核心组件
+- **拖拽系统**: 基于 @dnd-kit/core 的专业拖拽交互
+- **样式管理**: clsx 和 tailwind-merge 的动态样式处理
+- **UI 组件**: 基于 Radix UI 的自定义组件库
 
-- **`package.json`**: 定义了项目依赖、脚本和 pnpm 的 overrides。
-- **`next.config.ts`**: Next.js 的配置文件，目前为空，但可以用于未来的高级配置。
-- **`tailwind.config.ts`**: Tailwind CSS 的配置文件，定义了内容扫描路径和主题扩展（如背景和前景颜色）。
-- **`postcss.config.mjs`**: PostCSS 的配置文件，用于与 Tailwind CSS 集成。
-- **`tsconfig.json`**: TypeScript 的配置文件，定义了编译选项和路径别名（如 `@/*`）。
-- **`eslint.config.mjs`**: ESLint 的配置文件，用于代码规范和质量检查。
+## 📂 项目结构
 
-## 功能
+```
+├── app/                           # Next.js App Router
+│   ├── api/transform/route.ts     # 文本转换 API 端点
+│   ├── page.tsx                   # 主应用界面
+│   ├── layout.tsx                 # 根布局组件
+│   └── globals.css                # 全局样式
+├── components/                    # UI 组件库
+│   ├── style-filter/              # 风格滤镜系统
+│   │   ├── types.ts              # 类型定义
+│   │   ├── filters-data.ts       # 风格数据配置
+│   │   ├── filter-container.tsx  # 滤镜容器组件
+│   │   └── ...                   # 动画和交互组件
+│   ├── ui/                       # 基础 UI 组件
+│   ├── length-control.tsx        # 字数控制滑动条
+│   └── text-stats.tsx           # 文本统计显示
+├── lib/                          # 业务逻辑层
+│   ├── api-client.ts            # API 客户端封装
+│   ├── transform-service.ts     # 转换服务核心
+│   ├── openai-service.ts        # OpenAI API 集成
+│   └── api-types.ts             # API 类型定义
+├── public/icons/                # 风格图标资源
+└── utils/                       # 工具函数
+```
 
-- **动态主题**: 支持浅色和深色模式，通过 CSS 变量和 `prefers-color-scheme` 实现。
-- **自适应文本输入框**: 一个类似 ChatGPT 的自适应高度文本输入框，当用户输入内容时，输入框会自动扩展高度。
-- **居中的 Placeholder**: 输入框的 placeholder 文本在垂直和水平方向上居中显示，提升了视觉吸引力。
-- **左对齐的输入文本**: 当用户开始输入时，文本会自动左对齐，以提供更自然的输入体验。
+## 🎨 风格滤镜一览
 
-## 页面布局
+### 文体风格（Style）
 
-- **`app/layout.tsx`**: 定义了应用的根布局，包括 `<html>` 和 `<body>` 标签。
-- **`app/page.tsx`**: 应用的主页面，包含一个居中的输入区域。
-- **`app/globals.css`**: 全局样式文件，定义了基础样式、主题变量和自定义 CSS 类。
+**新闻 / 学术 / 教科书**
+- AP Style
+- APA Style
+- IEEE Style
+- Textbook Style
+- Investigative
 
-### 布局结构
+**社群 / 平台文化**
+- 4chan Style
+- Reddit Style
+- BuzzFeed
+- Twitter Style
+- Instagram Caption
+- Meme Style
 
-页面采用 Flexbox 布局，将内容垂直和水平居中。主要结构如下：
+**小说 / 创意写作**
+- Hemingway Style
 
-1.  一个 `div` 作为根容器，使用 `flex`、`flex-col`、`items-center` 和 `justify-center` 将内容居中。
-2.  一个相对定位的 `div`（`w-[500px]`）作为输入区域的容器。
-3.  一个带有虚线边框的 `div`（`custom-dash`），用于包裹输入框。
-4.  一个自适应高度的 `textarea` 组件（`<Input>`），作为用户的输入区域。
+### 结构模板（Structure）
 
-### 样式亮点
+**新闻 / 资讯结构**
+- Inverted Pyramid
+- Headline Driven
 
-- **`custom-dash`**: 一个带有虚线边框和圆角的样式，为输入区域增添了视觉趣味。
-- **`center-placeholder-textarea`**: 一个自定义的 CSS 类，利用 `:placeholder-shown` 伪类实现了 placeholder 的居中显示，同时确保用户输入的文本左对齐。
-- **动态背景**: `background-wrapper` 类（虽然在当前页面未使用）展示了如何使用背景图片和阴影来创建更丰富的视觉效果。
+**列表 / 线程 / 教程**
+- Listicle
+- Threaded
+- How-to
+- Bullet-pointed
 
-## API配置
+**学术 / 叙事结构**
+- IMRaD
 
-### OpenAI API集成
+### 策略与参数（Strategy & Controls）
+- Clickbait
+- Call to Action
+- SEO Optimized
+- FOMO Driven
+- Hashtag Heavy
+- Emoji Laden
+- Flesch-Kincaid
+- Citation Heavy
+- Technical Jargon
 
-本项目已集成真实的OpenAI API进行文本风格转换。要使用此功能，请按以下步骤配置：
+## ⚙️ 配置指南
 
-1. **获取OpenAI API密钥**
-   - 访问 [OpenAI Platform](https://platform.openai.com/account/api-keys)
-   - 创建新的API密钥
+### 环境配置
+1. **获取 OpenAI API 密钥**
+   ```bash
+   # 访问 https://platform.openai.com/account/api-keys
+   # 创建新的 API 密钥
+   ```
 
 2. **配置环境变量**
    ```bash
    cp .env.example .env.local
    ```
-   
-   编辑 `.env.local` 文件，设置你的API密钥：
+
+   编辑 `.env.local` 文件：
    ```bash
    OPENAI_API_KEY=sk-proj-your_api_key_here
+   OPENAI_MODEL=gpt-4o-mini                    # 可选，默认值
+   OPENAI_MAX_TOKENS=2000                      # 可选，默认值
+   OPENAI_TEMPERATURE=0.7                      # 可选，默认值
+   API_TIMEOUT=30000                           # 可选，30秒超时
+   API_MAX_RETRIES=3                           # 可选，最大重试次数
    ```
 
-3. **可选配置**
-   - `OPENAI_MODEL`: 使用的GPT模型 (默认: gpt-4o-mini)
-   - `OPENAI_MAX_TOKENS`: 最大token数 (默认: 2000)
-   - `OPENAI_TEMPERATURE`: 创造性参数 (默认: 0.7)
-   - `API_TIMEOUT`: API超时时间 (默认: 30秒)
-   - `API_MAX_RETRIES`: 最大重试次数 (默认: 3)
+### 本地开发
+```bash
+# 安装依赖
+pnpm install
 
-### 支持的风格转换
+# 启动开发服务器
+pnpm dev
 
-- **AP Style**: 美联社新闻风格
-- **X Style**: 社交媒体风格
-- **Inverted Pyramid**: 倒金字塔新闻结构
-- **Breaking News**: 突发新闻风格
-- **Academic**: 学术论文风格
+# 构建生产版本
+pnpm build
 
-## 未来可扩展方向
+# 代码检查
+pnpm lint
+```
 
-- **功能增强**: 可以增加文本格式化、实时协作等功能。
-- **更多风格**: 添加更多专业写作风格（商业邮件、创意写作、技术文档等）。
-- **状态管理**: 对于更复杂的应用，可以引入状态管理库，如 Zustand 或 Redux Toolkit。
-- **路由**: 可以添加更多的页面和路由，以构建一个功能更完整的应用。
+## 🔧 核心实现
+
+### 状态管理
+应用使用了完整的状态机模式管理转换流程：
+- `idle`: 初始状态，等待文本输入
+- `readyToTransform`: 文本就绪，可进行转换
+- `transforming`: 转换进行中，显示加载状态
+- `transformed`: 转换完成，展示结果对比
+
+### API 集成
+- **类型安全**: 完整的 TypeScript 类型定义
+- **错误处理**: 分层错误处理和用户友好的错误信息
+- **性能优化**: API 响应缓存和请求去重
+- **重试机制**: 网络失败时自动重试
+
+### 交互体验
+- **拖拽操作**: 流畅的拖拽动画和视觉反馈
+- **字数控制**: 实时字数统计和目标长度设置
+- **结果操作**: 一键复制、重试和重新开始
+- **响应式设计**: 适配不同屏幕尺寸
+
+## 🚀 扩展方向
+
+- **多语言支持**: 添加国际化支持
+- **批量处理**: 支持多文本同时转换
+- **自定义风格**: 允许用户创建个性化风格
+- **协作功能**: 团队共享和评论功能
+- **数据分析**: 使用统计和效果分析

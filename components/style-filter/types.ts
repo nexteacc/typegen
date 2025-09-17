@@ -23,7 +23,14 @@ export interface StyleFilter {
   apiParameter: string;
   
   /** 滤镜类别，用于分组显示 */
-  category?: 'news' | 'social' | 'academic' | 'creative' | 'marketing';
+  category?:
+    | 'style-news'
+    | 'style-social'
+    | 'style-creative'
+    | 'structure-news'
+    | 'structure-list'
+    | 'structure-academic'
+    | 'strategy';
 }
 
 /**

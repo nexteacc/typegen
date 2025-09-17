@@ -58,26 +58,43 @@ export enum ApiErrorCode {
 
 // 支持的风格类型
 export const SUPPORTED_STYLES = [
-  // 原有风格
+  // Style · 新闻 / 学术 / 教科书
   'ap-style',
-  'x-style', 
-  'inverted-pyramid',
-  'breaking-news',
-  'academic',
-  
-  // 新增风格
+  'apa-style',
+  'ieee-style',
+  'textbook-style',
+  'investigative',
+
+  // Style · 社群 / 平台文化
   '4chan-style',
+  'reddit-style',
   'buzzfeed-style',
+  'twitter-style',
+  'instagram-caption',
+  'meme-style',
+
+  // Style · 小说 / 创意写作
+  'hemingway-style',
+
+  // Structure 系列
+  'inverted-pyramid',
+  'headline-driven',
+  'listicle',
+  'threaded',
+  'how-to',
+  'bullet-pointed',
+  'imrd-style',
+
+  // Strategy & Controls
+  'clickbait',
   'call-to-action',
-  'citation-heavy',
+  'seo-optimized',
   'fomo-driven',
   'hashtag-heavy',
-  'headline-driven',
-  'imrd-style',
-  'investigative',
-  'meme-style',
-  'passive-voice',
-  'threaded-post'
+  'emoji-laden',
+  'flesch-kincaid',
+  'citation-heavy',
+  'technical-jargon'
 ] as const;
 
 export type SupportedStyle = typeof SUPPORTED_STYLES[number];
