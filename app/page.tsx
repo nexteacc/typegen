@@ -134,146 +134,158 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-full w-full">
-      <div className={cn(
-        "relative transition-all duration-500",
-        state === "transformed" ? "w-[1000px]" : "w-[500px]"
-      )}>
-        {/* 转换前：单栏布局 */}
-        {state !== "transformed" && (
-          <div className="relative" style={{ gap: '64px' }}>
-            <div
-              className={cn(
-                "w-full h-[200px] bg-transparent flex items-center justify-center p-4 mb-16 relative",
-                "border-2 border-dashed border-gray-300 transition-all duration-300",
-                "container-rounded",
-                isOver && "border-solid border-blue-500 shadow-glow",
-                state === "readyToTransform" && "border-solid border-blue-500 shadow-glow",
-                state === "transforming" && "border-solid border-yellow-500 shadow-glow"
-              )}
-              style={{ borderRadius: '20px' }}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <textarea
-                placeholder="paste text here"
-                className="w-full h-full border-none bg-transparent text-center center-placeholder-textarea input-rounded resize-none outline-none"
-                style={{ borderRadius: '16px' }}
-                value={text}
-                onChange={handleTextChange}
-                readOnly={state === "transforming"}
-              />
-
-            {droppedFilter && (
-              <TextBoxSnapEffect
-                filter={droppedFilter}
-                onComplete={handleTextBoxSnapComplete}
-              />
-            )}
-
-            <LightSweepEffect
-              isActive={isLightScanning}
-              onComplete={handleLightSweepComplete}
-            />
-            </div>
-            
-            <div className="mt-2 text-center">
-              <span className={cn(
-                "text-xs transition-colors",
-                text.length > 5000 ? "text-red-500 font-medium" : "text-gray-400"
-              )}>
-                {text.length}/5000
-              </span>
-            </div>
-            
-            {text.trim() && (
-              <LengthControl
-                originalLength={text.length}
-                value={targetLength}
-                onChange={setTargetLength}
-                className="mt-4"
-              />
-            )}
-          </div>
-        )}
-
-        {state === "transformed" && (
-          <div className="flex gap-8 mb-16">
-            <div className="flex-1">
-              <div className="mb-3 text-sm text-gray-500 font-medium text-center">
-                Original Text
-              </div>
-              <div className={cn(
-                "w-full h-[200px] bg-gray-50 flex items-center justify-center p-4 relative",
-                "border-2 border-gray-200 transition-all duration-300 container-rounded"
-              )}>
+    <div className="flex flex-col min-h-screen w-full">
+      {/* 主内容区域 - 减少flex-1的影响，添加固定间距 */}
+      <div className="flex flex-col items-center justify-center px-8 py-16 flex-grow"> {/* 使用py-16代替pb-12，flex-grow代替flex-1 */}
+        <div className={cn(
+          "relative transition-all duration-500",
+          state === "transformed" ? "w-[1000px]" : "w-[500px]"
+        )}>
+          {/* 转换前：单栏布局 */}
+          {state !== "transformed" && (
+            <div className="relative">
+              <div
+                className={cn(
+                  "w-full h-[200px] bg-transparent flex items-center justify-center p-4 relative",
+                  "border-2 border-dashed border-gray-300 transition-all duration-300",
+                  "container-rounded",
+                  isOver && "border-solid border-blue-500 shadow-glow",
+                  state === "readyToTransform" && "border-solid border-blue-500 shadow-glow",
+                  state === "transforming" && "border-solid border-yellow-500 shadow-glow"
+                )}
+                style={{ borderRadius: '20px' }}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
                 <textarea
-                  className="w-full h-full border-none bg-transparent text-left input-rounded resize-none outline-none text-gray-600"
-                  style={{ borderRadius: '16px' }}
-                  value={originalText}
-                  readOnly
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-center">
-              <div className="text-3xl text-green-500 animate-pulse">
-                →
-              </div>
-            </div>
-            <div className="flex-1">
-              <div className="mb-3 text-sm text-green-600 font-medium text-center">
-                Transformed Result ({selectedFilter?.name})
-              </div>
-              <div className={cn(
-                "w-full h-[200px] bg-transparent flex items-center justify-center p-4 relative",
-                "border-2 border-solid border-green-500 shadow-glow container-rounded"
-              )}>
-                <textarea
-                  className="w-full h-full border-none bg-transparent text-left input-rounded resize-none outline-none"
+                  placeholder="paste text here"
+                  className="w-full h-full border-none bg-transparent text-center center-placeholder-textarea input-rounded resize-none outline-none"
                   style={{ borderRadius: '16px' }}
                   value={text}
-                  readOnly
+                  onChange={handleTextChange}
+                  readOnly={state === "transforming"}
+                />
+
+                {droppedFilter && (
+                  <TextBoxSnapEffect
+                    filter={droppedFilter}
+                    onComplete={handleTextBoxSnapComplete}
+                  />
+                )}
+
+                <LightSweepEffect
+                  isActive={isLightScanning}
+                  onComplete={handleLightSweepComplete}
                 />
               </div>
+              
+              <div className="mt-2 text-center">
+                <span className={cn(
+                  "text-xs transition-colors",
+                  text.length > 5000 ? "text-red-500 font-medium" : "text-gray-400"
+                )}>
+                  {text.length}/5000
+                </span>
+              </div>
+              
+              {text.trim() && (
+                <LengthControl
+                  originalLength={text.length}
+                  value={targetLength}
+                  onChange={setTargetLength}
+                  className="mt-4"
+                />
+              )}
             </div>
-          </div>
-        )}
+          )}
 
-        {/* 结果操作按钮 */}
-        {showResultActions && state === "transformed" && (
-          <div className="mt-6 flex gap-3 justify-center">
-            <button
-              onClick={handleCopyText}
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-            >
-              📋 Copy Text
-            </button>
-            <button
-              onClick={handleTryOtherStyle}
-              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
-            >
-              🎨 Try Other Style
-            </button>
-            <button
-              onClick={handleRestart}
-              className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
-            >
-              🔄 Restart
-            </button>
-          </div>
-        )}
+          {/* 转换后：双栏对比布局 */}
+          {state === "transformed" && (
+            <div className="flex gap-8">
+              <div className="flex-1">
+                <div className="mb-3 text-sm text-gray-500 font-medium text-center">
+                  Original Text
+                </div>
+                <div className={cn(
+                  "w-full h-[200px] bg-gray-50 flex items-center justify-center p-4 relative",
+                  "border-2 border-gray-200 transition-all duration-300 container-rounded"
+                )}>
+                  <textarea
+                    className="w-full h-full border-none bg-transparent text-left input-rounded resize-none outline-none text-gray-600"
+                    style={{ borderRadius: '16px' }}
+                    value={originalText}
+                    readOnly
+                  />
+                </div>
+              </div>
 
-        {/* 滤镜图标容器 */}
-        <div style={{ marginTop: '40px', width: '100%', overflow: 'visible' }}>
-          <FilterIconsContainer
-            state={state}
-            selectedFilter={selectedFilter}
-            onFilterSelect={handleFilterSelect}
-            onSnapComplete={handleSnapComplete}
-          />
+              <div className="flex items-center justify-center">
+                <div className="text-3xl text-green-500 animate-pulse">
+                  →
+                </div>
+              </div>
+              
+              <div className="flex-1">
+                <div className="mb-3 text-sm text-green-600 font-medium text-center">
+                  Transformed Result ({selectedFilter?.name})
+                </div>
+                <div className={cn(
+                  "w-full h-[200px] bg-transparent flex items-center justify-center p-4 relative",
+                  "border-2 border-solid border-green-500 shadow-glow container-rounded"
+                )}>
+                  <textarea
+                    className="w-full h-full border-none bg-transparent text-left input-rounded resize-none outline-none"
+                    style={{ borderRadius: '16px' }}
+                    value={text}
+                    readOnly
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 结果操作按钮 */}
+          {showResultActions && state === "transformed" && (
+            <div className="mt-6 flex gap-3 justify-center">
+              <button
+                onClick={handleCopyText}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                📋 Copy Text
+              </button>
+              <button
+                onClick={handleTryOtherStyle}
+                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+              >
+                🎨 Try Other Style
+              </button>
+              <button
+                onClick={handleRestart}
+                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+              >
+                🔄 Restart
+              </button>
+            </div>
+          )}
         </div>
+        
+        {/* 提示信息 */}
+        {state === 'readyToTransform' && (
+          <div className="mt-8 text-center text-sm text-gray-500">
+            Drag a filter from the toolbar below to transform your text
+          </div>
+        )}
+      </div>
+
+      {/* 底部滤镜工具栏 - 固定底部，移除边框线 */}
+      <div className="bg-gray-50/30 pt-2"> {/* 移除border-t，添加pt-2上边距 */}
+        <FilterIconsContainer
+          state={state}
+          selectedFilter={selectedFilter}
+          onFilterSelect={handleFilterSelect}
+          onSnapComplete={handleSnapComplete}
+        />
       </div>
     </div>
   );

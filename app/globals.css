@@ -135,12 +135,11 @@ body {
                 0 0 20px rgba(34, 197, 94, 0.3);
   }
 }
-/* 滤镜
-图标相关样式 */
+/* 滤镜图标相关样式 - 网格布局优化 */
 .filter-icon-container {
-  margin: 0 4px;
   position: relative;
   z-index: 10;
+  /* 移除固定外边距，使用网格间距控制 */
 }
 
 .filter-icon-container:hover {
@@ -150,6 +149,12 @@ body {
 /* 确保滤镜容器不裁剪内容 */
 .overflow-visible {
   overflow: visible !important;
+}
+
+/* 桌面端滤镜图标悬停效果 */
+.filter-icon-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* 字数控制滑动条样式 */
