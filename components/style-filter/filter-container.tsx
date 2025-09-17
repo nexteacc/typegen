@@ -28,25 +28,25 @@ export function FilterIconsContainer({
   const categories = React.useMemo(() => [
     {
       id: 'news',
-      name: '新闻写作',
+      name: 'News',
       emoji: '📰',
       filters: getFiltersByCategory('news')
     },
     {
       id: 'academic',
-      name: '学术写作',
+      name: 'Academic',
       emoji: '🎓',
       filters: getFiltersByCategory('academic')
     },
     {
       id: 'social',
-      name: '社交媒体',
+      name: 'Social',
       emoji: '📱',
       filters: getFiltersByCategory('social')
     },
     {
       id: 'marketing',
-      name: '营销推广',
+      name: 'Marketing',
       emoji: '📈',
       filters: getFiltersByCategory('marketing')
     }
