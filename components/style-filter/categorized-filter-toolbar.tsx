@@ -37,7 +37,7 @@ export function CategorizedFilterToolbar({
 }: CategorizedFilterToolbarProps) {
   return (
     <div className={cn(
-      "w-full max-w-2xl mx-auto px-6 py-4", // 调整为max-w-2xl匹配文本区域宽度
+      "w-full max-w-[900px] mx-auto px-6 py-4", // 根据容器尺寸设计规范调整为max-w-[900px]
       className
     )}>
       <div className="space-y-3"> {/* 恢复合理的行间间距 */}
@@ -57,8 +57,7 @@ export function CategorizedFilterToolbar({
               </span>
             </div>
             
-            {/* 滤镜图标区域 - 进一步增大间距 */}
-            <div className="flex-1 flex items-center justify-start gap-8 min-h-[56px]"> {/* gap-8 = 32px, 进一步放宽间距 */}
+            <div className="flex-1 flex items-center justify-start min-h-[56px]" style={{ gap: '24px' }}>
               {category.filters.map((filter) => (
                 <FilterIcon
                   key={filter.id}
