@@ -145,10 +145,23 @@ export default function Home() {
 
   return (
     <div className="relative flex h-full w-full flex-col">
-      {/* 语言切换按钮 - 右上角 */}
-      <div className="absolute right-6 top-6 z-10">
+      {/* 头部区域 - Logo 和语言切换 */}
+      <header className="relative z-10 flex items-center justify-between px-6 py-4">
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          <img
+            src="/logo-header-white.png"
+            alt="TypeGen Logo"
+            className="h-8 w-8 object-cover rounded-full"
+          />
+          <h1 className="text-lg font-bold bg-gradient-to-r from-orange-400 via-yellow-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            TypeGen
+          </h1>
+        </div>
+
+        {/* 语言切换按钮 */}
         <LanguageToggle className="shadow-lg" />
-      </div>
+      </header>
       {/* 主内容区域 - 减少flex-1的影响，添加固定间距 */}
       <div className="flex flex-col items-center justify-center px-8 py-16 flex-grow"> {/* 使用py-16代替pb-12，flex-grow代替flex-1 */}
         <div className={cn(

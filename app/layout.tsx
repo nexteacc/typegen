@@ -15,8 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TypeGenAI",
-  description: "智能文本风格转换工具，支持多种写作风格转换",
+  title: "TypeGen - 智能文本风格转换工具",
+  description: "拖拽即转换，风格由你选。28种专业风格滤镜，AI驱动的文本风格转换工具。",
+  icons: {
+    icon: '/favicon-white.ico',
+    shortcut: '/favicon-white.ico',
+    apple: '/apple-touch-icon-white.png',
+  },
 };
 
 export default function RootLayout({
