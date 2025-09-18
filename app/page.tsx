@@ -138,10 +138,10 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen w-full">
+    <div className="relative flex h-full w-full flex-col">
       {/* 语言切换按钮 - 右上角 */}
-      <div className="absolute top-4 right-4 z-10">
-        <LanguageToggle />
+      <div className="absolute right-6 top-6 z-10">
+        <LanguageToggle className="shadow-lg" />
       </div>
       {/* 主内容区域 - 减少flex-1的影响，添加固定间距 */}
       <div className="flex flex-col items-center justify-center px-8 py-16 flex-grow"> {/* 使用py-16代替pb-12，flex-grow代替flex-1 */}
