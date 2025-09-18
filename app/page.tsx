@@ -23,6 +23,7 @@ export default function Home() {
   const [originalText, setOriginalText] = useState<string>("");
   const [showResultActions, setShowResultActions] = useState(false);
   const [targetLength, setTargetLength] = useState<number>(0);
+  const [isTextTooLong, setIsTextTooLong] = useState(false);
   const [apiClient] = useState(() => new TransformApiClient());
 
   // 处理文本输入
@@ -30,11 +31,16 @@ export default function Home() {
     const newText = e.target.value;
     setText(newText);
 
+    // 检查文本长度并设置警告状态
+    const isTooLong = newText.length > 5000;
+    setIsTextTooLong(isTooLong);
+
     if (newText.trim() && state === "idle") {
       setState("readyToTransform");
     }
     if (!newText.trim() && state !== "idle") {
       setState("idle");
+      setIsTextTooLong(false); // 清除警告状态
     }
   };
 
@@ -196,6 +202,17 @@ export default function Home() {
                   {text.length}/5000
                 </span>
               </div>
+
+              {/* 文本超长警告消息 */}
+              {isTextTooLong && (
+                <div className="mt-3 px-4 py-3 bg-red-50 border border-red-200 rounded-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="text-red-500 text-sm font-medium">
+                      {t('textTooLongWarning')}
+                    </span>
+                  </div>
+                </div>
+              )}
               
               {text.trim() && (
                 <LengthControl

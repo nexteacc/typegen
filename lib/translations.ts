@@ -35,6 +35,7 @@ export const translations = {
     copySuccess: '文本已复制到剪贴板！',
     
     // 错误消息
+    textTooLongWarning: '⚠️ 文本长度超过5000字符限制，请缩短您的文本',
     copyFailed: '复制失败，请手动复制文本',
     networkError: '网络错误',
     transformFailed: '转换失败',
@@ -101,6 +102,7 @@ export const translations = {
     copySuccess: 'Text copied to clipboard!',
     
     // 错误消息
+    textTooLongWarning: '⚠️ Text exceeds 5000 character limit. Please shorten your text.',
     copyFailed: 'Copy failed, please copy text manually',
     networkError: 'Network error',
     transformFailed: 'Transform failed',
