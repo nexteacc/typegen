@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
 import { useTranslation } from './use-translation';
 import { getFiltersByCategory } from '@/components/style-filter/filters-data';
+import { StyleFilter } from '@/components/style-filter/types';
 
 // 类别配置接口
 interface FilterCategory {
   id: string;
   name: string;
   emoji: string;
-  filters: any[];
+  filters: StyleFilter[];
 }
 
 /**

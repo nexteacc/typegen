@@ -32,14 +32,17 @@ export function CategorizedFilterToolbar({
   onFilterSelect,
   onSnapComplete,
   selectedFilter,
-  state: _state, // 在当前版本中未使用，但保留接口
+  state,
   className
 }: CategorizedFilterToolbarProps) {
   return (
-    <div className={cn(
+    <div
+      data-transformer-state={state}
+      className={cn(
       "w-full max-w-[900px] mx-auto px-6 py-4", // 根据容器尺寸设计规范调整为max-w-[900px]
       className
-    )}>
+    )}
+    >
       <div className="space-y-3"> {/* 恢复合理的行间间距 */}
         {categories.map((category, categoryIndex) => (
           <motion.div
@@ -103,6 +106,7 @@ function FilterIcon({
 
   const handleDragEnd = () => {
     setIsDragging(false);
+    onSnapComplete?.(filter);
   };
 
   const handleClick = () => {
