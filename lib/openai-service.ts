@@ -5,54 +5,7 @@
 
 import OpenAI from 'openai';
 import { TransformResult, SupportedStyle, SUPPORTED_STYLES } from './api-types';
-
-// 风格转换提示词模板
-// 原则：为每类风格提供明确的写作指令，确保模型输出符合目标语气与结构
-// 风格特定温度配置
-// 基于不同风格的创造性需求和准确性要求
-const STYLE_TEMPERATURES: Record<SupportedStyle, number> = {
-  // Style · 新闻 / 学术 / 教科书 - 严谨性优先
-  'ieee-style': 0.3,        // 最严格的技术标准
-  'apa-style': 0.4,         // 学术规范，允许适度变化
-  'textbook-style': 0.4,    // 教育内容，结构化表达
-  'ap-style': 0.5,          // 新闻标准，平衡客观与可读性
-  'investigative': 0.5,     // 调查报道，证据为主
-
-  // Style · 社群 / 平台文化 - 创意性优先
-  'reddit-style': 0.7,      // 社区讨论，需要个性化
-  '4chan-style': 0.8,       // 网络文化，需要更多变化
-  'buzzfeed-style': 0.8,    // 病毒传播，创意吸睛
-  'twitter-style': 0.8,     // 社交媒体，简洁有力
-  'instagram-caption': 0.8,  // 视觉配文，情感丰富
-  'meme-style': 0.9,        // 网络梗，最大创造性
-
-  // Style · 小说 / 创意写作 - 文学性平衡
-  'hemingway-style': 0.6,    // 极简风格，保持特色一致性
-
-  // Structure · 新闻 / 资讯结构 - 结构化优先
-  'inverted-pyramid': 0.5,   // 新闻结构，逻辑清晰
-  'headline-driven': 0.6,    // 标题驱动，需要吸引力
-
-  // Structure · 列表 / 线程 / 教程 - 实用性优先
-  'listicle': 0.6,          // 列表文章，平衡结构与趣味
-  'threaded': 0.7,          // 线程叙述，连贯性与变化并重
-  'how-to': 0.5,            // 教程指南，清晰准确优先
-  'bullet-pointed': 0.5,    // 要点罗列，简洁明确
-
-  // Structure · 学术 / 叙事结构 - 学术规范
-  'imrd-style': 0.4,        // 科研论文，严格结构化
-
-  // Strategy & Controls - 策略导向，差异化需求
-  'seo-optimized': 0.5,     // SEO优化，关键词准确性
-  'citation-heavy': 0.4,    // 引用密集，严谨性优先
-  'technical-jargon': 0.3,  // 技术术语，精确性最高
-  'flesch-kincaid': 0.5,    // 可读性优化，平衡表达
-  'clickbait': 0.8,         // 标题党，创意吸引力
-  'call-to-action': 0.7,    // 行动号召，说服力与变化
-  'fomo-driven': 0.8,       // 恐惧营销，情感冲击力
-  'hashtag-heavy': 0.8,     // 标签密集，社交传播
-  'emoji-laden': 0.8,       // 表情丰富，轻松活泼
-};
+import { styleProfiles } from './style-profiles';
 
 const STYLE_PROMPTS: Record<SupportedStyle, string> = {
   // Style · 新闻 / 学术 / 教科书
@@ -99,7 +52,7 @@ export class OpenAIService {
   private readonly MAX_TEXT_LENGTH = 5000;
   private readonly DEFAULT_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
   private readonly DEFAULT_MAX_TOKENS = parseInt(process.env.OPENAI_MAX_TOKENS || '2000');
-  private readonly DEFAULT_TEMPERATURE = parseFloat(process.env.OPENAI_TEMPERATURE || '0.7');
+  private readonly DEFAULT_TEMPERATURE = parseFloat(process.env.OPENAI_TEMPERATURE || '0.6');
   private readonly MAX_RETRIES = parseInt(process.env.API_MAX_RETRIES || '3');
   private readonly TIMEOUT = parseInt(process.env.API_TIMEOUT || '30000');
 
@@ -155,8 +108,12 @@ ${text}
 Transformed text:`;
 
 
-      // 获取风格特定的温度参数
-      const styleTemperature = this.getStyleTemperature(style as SupportedStyle);
+      // 根据风格和目标长度动态计算温度
+      const temperature = this.calculateTemperature(
+        style as SupportedStyle,
+        text.length,
+        targetLength
+      );
 
       const client = this.ensureClient();
 
@@ -175,7 +132,7 @@ Transformed text:`;
             }
           ],
           max_tokens: this.DEFAULT_MAX_TOKENS,
-          temperature: styleTemperature, // 使用风格特定温度
+          temperature,
         });
       });
 
@@ -192,7 +149,7 @@ Transformed text:`;
         inputLanguage: this.detectLanguageType(text),
         outputLanguage: this.detectLanguageType(transformedText),
         style: style,
-        temperature: styleTemperature,  // 记录使用的温度
+        temperature,
         processingTime: Date.now() - startTime
       });
 
@@ -249,12 +206,36 @@ Transformed text:`;
   }
 
   /**
-   * 获取风格特定的温度参数
-   * @param style 风格类型
-   * @returns 该风格的最佳温度值
+   * 结合风格与目标长度，计算最终使用的采样温度
    */
-  private getStyleTemperature(style: SupportedStyle): number {
-    return STYLE_TEMPERATURES[style] || this.DEFAULT_TEMPERATURE;
+  private calculateTemperature(
+    style: SupportedStyle,
+    originalLength: number,
+    targetLength?: number
+  ): number {
+    const profile = styleProfiles[style];
+    const minTemperature = profile?.minTemperature ?? 0.5;
+    const maxTemperature = profile?.maxTemperature ?? 0.8;
+
+    let temperature = profile?.baseTemperature ?? this.DEFAULT_TEMPERATURE;
+
+    if (profile?.lengthAdjustments && targetLength && originalLength > 0) {
+      const ratio = targetLength / originalLength;
+
+      for (const adjustment of profile.lengthAdjustments) {
+        const hitLowerBound =
+          adjustment.ratioBelow !== undefined && ratio <= adjustment.ratioBelow;
+        const hitUpperBound =
+          adjustment.ratioAbove !== undefined && ratio >= adjustment.ratioAbove;
+
+        if (hitLowerBound || hitUpperBound) {
+          temperature += adjustment.delta;
+        }
+      }
+    }
+
+    const clamped = Math.min(maxTemperature, Math.max(minTemperature, temperature));
+    return Number(clamped.toFixed(3));
   }
 
   /**
