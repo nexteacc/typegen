@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react";
+import Image from "next/image";
 import { StyleFilter, TransformerState, FilterIconsContainer } from "@/components/style-filter";
 import { TextBoxSnapEffect } from "@/components/style-filter/text-box-snap-effect";
 import { LightSweepEffect } from "@/components/style-filter/light-sweep-effect";
@@ -144,17 +145,20 @@ export default function Home() {
   };
 
   return (
-    <div className="relative flex h-full w-full flex-col">
+    <div className="relative flex w-full flex-1 flex-col">
       {/* 头部区域 - Logo 和语言切换 */}
-      <header className="relative z-10 flex items-center justify-between px-6 py-4">
+      <header className="relative z-10 flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4">
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <img
+          <Image
             src="/logo-header-white.png"
             alt="TypeGen Logo"
-            className="h-8 w-8 object-cover rounded-full"
+            width={36}
+            height={36}
+            className="h-8 w-8 rounded-full object-cover sm:h-9 sm:w-9"
+            priority
           />
-          <h1 className="text-lg font-bold bg-gradient-to-r from-orange-400 via-yellow-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+          <h1 className="text-base font-bold text-transparent bg-gradient-to-r from-orange-400 via-yellow-400 via-cyan-400 to-blue-500 bg-clip-text sm:text-lg">
             TypeGen
           </h1>
         </div>
@@ -162,18 +166,21 @@ export default function Home() {
         {/* 语言切换按钮 */}
         <LanguageToggle className="shadow-lg" />
       </header>
-      {/* 主内容区域 - 减少flex-1的影响，添加固定间距 */}
-      <div className="flex flex-col items-center justify-center px-8 py-16 flex-grow"> {/* 使用py-16代替pb-12，flex-grow代替flex-1 */}
-        <div className={cn(
-          "relative transition-all duration-500",
-          state === "transformed" ? "w-[1000px]" : "w-[500px]"
-        )}>
+
+      {/* 主内容区域 */}
+      <div className="flex w-full flex-1 flex-col items-center px-4 pb-6 pt-4 sm:px-6 md:px-8 md:pb-10 md:pt-8">
+        <div
+          className={cn(
+            "relative w-full max-w-2xl transition-all duration-500 sm:max-w-3xl",
+            state === "transformed" ? "lg:max-w-5xl" : "lg:max-w-3xl"
+          )}
+        >
           {/* 转换前：单栏布局 */}
           {state !== "transformed" && (
             <div className="relative">
               <div
                 className={cn(
-                  "w-full h-[200px] bg-transparent flex items-center justify-center p-4 relative",
+                  "relative flex min-h-[200px] w-full items-stretch justify-center bg-transparent p-4",
                   "border-2 border-dashed border-gray-300 transition-all duration-300",
                   "container-rounded",
                   isOver && "border-solid border-blue-500 shadow-glow",
@@ -187,8 +194,8 @@ export default function Home() {
               >
                 <textarea
                   placeholder={t('pasteTextHere')}
-                  className="w-full h-full border-none bg-transparent text-center center-placeholder-textarea input-rounded resize-none outline-none"
-                  style={{ borderRadius: '16px' }}
+                  className="w-full flex-1 border-none bg-transparent center-placeholder-textarea input-rounded resize-none text-sm outline-none sm:text-base"
+                  style={{ borderRadius: '16px', minHeight: '180px' }}
                   value={text}
                   onChange={handleTextChange}
                   readOnly={state === "transforming"}
@@ -209,7 +216,7 @@ export default function Home() {
               
               <div className="mt-2 text-center">
                 <span className={cn(
-                  "text-xs transition-colors",
+                  "text-xs transition-colors sm:text-sm",
                   text.length > 5000 ? "text-red-500 font-medium" : "text-gray-400"
                 )}>
                   {text.length}/5000
@@ -218,9 +225,9 @@ export default function Home() {
 
               {/* 文本超长警告消息 */}
               {isTextTooLong && (
-                <div className="mt-3 px-4 py-3 bg-red-50 border border-red-200 rounded-lg">
+                <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 sm:px-4 sm:py-3">
                   <div className="flex items-center gap-2">
-                    <span className="text-red-500 text-sm font-medium">
+                    <span className="text-xs font-medium text-red-500 sm:text-sm">
                       {t('textTooLongWarning')}
                     </span>
                   </div>
@@ -232,7 +239,7 @@ export default function Home() {
                   originalLength={text.length}
                   value={targetLength}
                   onChange={setTargetLength}
-                  className="mt-4"
+                  className="mt-5 sm:mt-6"
                 />
               )}
             </div>
@@ -240,41 +247,49 @@ export default function Home() {
 
           {/* 转换后：双栏对比布局 */}
           {state === "transformed" && (
-            <div className="flex gap-8">
+            <div className="flex flex-col gap-6 md:flex-row md:gap-8">
               <div className="flex-1">
-                <div className="mb-3 text-sm text-gray-500 font-medium text-center">
+                <div className="mb-3 text-center text-xs font-medium text-gray-500 sm:text-sm">
                   {t('originalText')}
                 </div>
                 <div className={cn(
-                  "w-full h-[200px] bg-gray-50 flex items-center justify-center p-4 relative",
+                  "w-full min-h-[200px] bg-gray-50 p-4",
                   "border-2 border-gray-200 transition-all duration-300 container-rounded"
-                )}>
+                )}
+                >
                   <textarea
-                    className="w-full h-full border-none bg-transparent text-left input-rounded resize-none outline-none text-gray-600"
-                    style={{ borderRadius: '16px' }}
+                    className="w-full flex-1 border-none bg-transparent input-rounded resize-none text-left text-sm text-gray-600 outline-none sm:text-base"
+                    style={{ borderRadius: '16px', minHeight: '180px' }}
                     value={originalText}
                     readOnly
                   />
                 </div>
               </div>
 
-              <div className="flex items-center justify-center">
+              <div className="hidden items-center justify-center md:flex">
                 <div className="text-3xl text-green-500 animate-pulse">
                   →
                 </div>
               </div>
+
+              <div className="flex items-center justify-center md:hidden">
+                <div className="text-2xl text-green-500 animate-pulse">
+                  ↓
+                </div>
+              </div>
               
               <div className="flex-1">
-                <div className="mb-3 text-sm text-green-600 font-medium text-center">
+                <div className="mb-3 text-center text-xs font-medium text-green-600 sm:text-sm">
                   {t('transformedResult')} ({selectedFilter?.name})
                 </div>
                 <div className={cn(
-                  "w-full h-[200px] bg-transparent flex items-center justify-center p-4 relative",
+                  "w-full min-h-[200px] bg-transparent p-4",
                   "border-2 border-solid border-green-500 shadow-glow container-rounded"
-                )}>
+                )}
+                >
                   <textarea
-                    className="w-full h-full border-none bg-transparent text-left input-rounded resize-none outline-none"
-                    style={{ borderRadius: '16px' }}
+                    className="w-full flex-1 border-none bg-transparent input-rounded resize-none text-left text-sm outline-none sm:text-base"
+                    style={{ borderRadius: '16px', minHeight: '180px' }}
                     value={text}
                     readOnly
                   />
@@ -285,22 +300,22 @@ export default function Home() {
 
           {/* 结果操作按钮 */}
           {showResultActions && state === "transformed" && (
-            <div className="mt-6 flex gap-3 justify-center">
+            <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-center sm:gap-3">
               <button
                 onClick={handleCopyText}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                className="w-full rounded-lg bg-blue-500 px-4 py-2 text-sm text-white transition-colors hover:bg-blue-600 sm:w-auto sm:text-base"
               >
                 {t('copyText')}
               </button>
               <button
                 onClick={handleTryOtherStyle}
-                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                className="w-full rounded-lg bg-green-500 px-4 py-2 text-sm text-white transition-colors hover:bg-green-600 sm:w-auto sm:text-base"
               >
                 {t('tryOtherStyle')}
               </button>
               <button
                 onClick={handleRestart}
-                className="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors"
+                className="w-full rounded-lg bg-gray-500 px-4 py-2 text-sm text-white transition-colors hover:bg-gray-600 sm:w-auto sm:text-base"
               >
                 {t('restart')}
               </button>
@@ -310,14 +325,14 @@ export default function Home() {
         
         {/* 提示信息 */}
         {state === 'readyToTransform' && (
-          <div className="mt-8 text-center text-sm text-gray-500">
+          <div className="mt-6 px-4 text-center text-sm text-gray-500 sm:mt-8">
             {t('dragFilterHint')}
           </div>
         )}
       </div>
 
-      {/* 底部滤镜工具栏 - 固定底部，移除边框线 */}
-      <div className="bg-gray-50/30 pt-2"> {/* 移除border-t，添加pt-2上边距 */}
+      {/* 底部滤镜工具栏 */}
+      <div className="w-full bg-gray-50/40 px-3 pb-4 pt-3 sm:px-6 md:pb-6">
         <FilterIconsContainer
           state={state}
           selectedFilter={selectedFilter}

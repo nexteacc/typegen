@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { cn } from '@/utils/cn';
 import { StyleFilter, TransformerState } from './types';
-// import { FilterIcon } from './filter-icon'; // 使用内部定义的FilterIcon
 
 interface FilterCategory {
   id: string;
@@ -24,8 +23,8 @@ interface CategorizedFilterToolbarProps {
 }
 
 /**
- * 按功能分类的滤镜工具栏组件
- * 垂直分行布局，每行一个功能类别
+ * 按分类展示的滤镜工具栏
+ * 支持小屏滚动与大屏整行布局
  */
 export function CategorizedFilterToolbar({
   categories,
@@ -39,28 +38,28 @@ export function CategorizedFilterToolbar({
     <div
       data-transformer-state={state}
       className={cn(
-      "w-full max-w-[900px] mx-auto px-6 py-4", // 根据容器尺寸设计规范调整为max-w-[900px]
-      className
-    )}
+        "mx-auto w-full max-w-3xl px-3 py-4 sm:px-5 md:max-w-4xl md:px-6 lg:max-w-5xl",
+        className
+      )}
     >
-      <div className="space-y-3"> {/* 恢复合理的行间间距 */}
+      <div className="flex flex-col gap-4">
         {categories.map((category, categoryIndex) => (
           <motion.div
             key={category.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: categoryIndex * 0.1 }}
-            className="flex items-center"
+            transition={{ duration: 0.4, delay: categoryIndex * 0.08 }}
+            className="flex flex-col gap-3 md:flex-row md:items-center"
           >
-            {/* 类别标签 - 缩小宽度 */}
-            <div className="flex items-center w-20 mr-6 flex-shrink-0">
-              <span className="text-sm mr-1">{category.emoji}</span>
-              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">
-                {category.name}
-              </span>
+            {/* 类别标签 */}
+            <div className="flex items-center gap-2 text-sm font-medium text-gray-600 md:w-32">
+              <span className="text-base">{category.emoji}</span>
+              <span className="whitespace-nowrap">{category.name}</span>
             </div>
-            
-            <div className="flex-1 flex items-center justify-start min-h-[56px]" style={{ gap: '24px' }}>
+
+            <div
+              className="flex gap-3 overflow-x-auto pb-2 md:flex-wrap md:gap-5 md:overflow-visible md:pb-0"
+            >
               {category.filters.map((filter) => (
                 <FilterIcon
                   key={filter.id}
@@ -81,7 +80,7 @@ export function CategorizedFilterToolbar({
 }
 
 /**
- * 单个滤镜图标组件 - 专为工具栏设计
+ * 单个滤镜图标组件 - 支持拖拽和点击
  */
 function FilterIcon({
   filter,
@@ -126,9 +125,8 @@ function FilterIcon({
   return (
     <div
       className={cn(
-        "relative flex items-center justify-center cursor-grab active:cursor-grabbing",
-        "w-12 h-12", // 缩小为只包含图标的尺寸
-        isDragging && "opacity-50 scale-105",
+        "filter-icon-container relative flex h-12 w-12 min-w-[3rem] items-center justify-center cursor-grab active:cursor-grabbing",
+        isDragging && "scale-105 opacity-50",
         className
       )}
       draggable
@@ -139,23 +137,22 @@ function FilterIcon({
       onMouseLeave={handleMouseLeave}
     >
       {/* 图标容器 */}
-      <div className="w-12 h-12 rounded-full bg-white/60 border border-gray-200 flex items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center rounded-full bg-white">
         <Image
           src={filter.icon}
           alt={filter.name}
           width={32}
           height={32}
-          className="w-8 h-8 object-cover rounded-full"
+          className="h-8 w-8 rounded-full object-cover"
           loading="lazy"
         />
       </div>
       
       {/* Tooltip 悬浮提示 */}
       {showTooltip && (
-        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-gray-900 text-white text-xs rounded whitespace-nowrap z-50">
+        <div className="absolute bottom-full left-1/2 z-50 mb-2 -translate-x-1/2 whitespace-nowrap rounded bg-gray-900 px-2 py-1 text-xs text-white">
           {filter.name}
-          {/* 小三角箭头 */}
-          <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900" />
+          <div className="absolute top-full left-1/2 -translate-x-1/2 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-900" />
         </div>
       )}
     </div>
