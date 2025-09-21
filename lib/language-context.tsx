@@ -21,29 +21,23 @@ interface LanguageProviderProps {
 }
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
-  const [language, setLanguageState] = useState<Language>('zh');
+  const [language, setLanguageState] = useState<Language>('en');
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // 从localStorage加载用户语言偏好
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('typegen-language');
-      if (saved === 'zh' || saved === 'en') {
-        setLanguageState(saved);
-      } else {
-        // 根据浏览器语言设置默认语言
-        const browserLang = navigator.language.toLowerCase();
-        const defaultLang = browserLang.startsWith('zh') ? 'zh' : 'en';
-        setLanguageState(defaultLang);
-      }
+    setIsHydrated(true);
+    const saved = localStorage.getItem('typegen-language');
+    if (saved === 'zh' || saved === 'en') {
+      setLanguageState(saved);
     }
+    // 如果没有保存的偏好，保持默认的 'en'
   }, []);
 
   // 设置语言并保存到localStorage
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('typegen-language', lang);
-    }
+    localStorage.setItem('typegen-language', lang);
   };
 
   // 切换语言

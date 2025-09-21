@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLanguage } from '@/lib/language-context';
 import { useTranslation } from '@/lib/use-translation';
 
@@ -11,11 +11,21 @@ import { useTranslation } from '@/lib/use-translation';
 export default function ClientMetadataUpdater() {
   const { language } = useLanguage();
   const { t } = useTranslation();
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isHydrated) return;
+
+    // 更新HTML的lang属性
+    document.documentElement.lang = language;
+
     // 更新页面标题
     document.title = t('metaTitle');
-    
+
     // 更新页面描述
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
@@ -27,7 +37,7 @@ export default function ClientMetadataUpdater() {
       newMetaDescription.content = t('metaDescription');
       document.head.appendChild(newMetaDescription);
     }
-  }, [language, t]);
+  }, [language, t, isHydrated]);
 
   return null; // 这个组件不渲染任何 UI
 }

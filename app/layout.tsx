@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TypeGen - 智能文本风格转换工具",
-  description: "拖拽即转换，风格由你选。28种专业风格滤镜，AI驱动的文本风格转换工具。",
+  title: "TypeGenAI - Intelligent Text Style Transformation Tool",
+  description: "Drag and drop to transform, style at your fingertips. 28 professional style filters, AI-powered text style transformation tool.",
   icons: {
     icon: '/favicon-white.ico',
     shortcut: '/favicon-white.ico',
@@ -31,7 +31,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh">
+    <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

@@ -72,7 +72,7 @@ export const translations = {
     categoryStrategy: '策略 · 传播',
 
     // SEO元数据
-    metaTitle: 'TypeGen - 智能文本风格转换工具',
+    metaTitle: 'TypeGenAI - 智能文本风格转换工具',
     metaDescription: '拖拽即转换，风格由你选。28种专业风格滤镜，AI驱动的文本风格转换工具。',
   },
   
