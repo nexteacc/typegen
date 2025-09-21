@@ -71,6 +71,9 @@ export const translations = {
     categoryStructureAcademic: '结构 · 学术',
     categoryStrategy: '策略 · 传播',
 
+    // SEO元数据
+    metaTitle: 'TypeGen - 智能文本风格转换工具',
+    metaDescription: '拖拽即转换，风格由你选。28种专业风格滤镜，AI驱动的文本风格转换工具。',
   },
   
   en: {
@@ -139,6 +142,9 @@ export const translations = {
     categoryStructureAcademic: 'Structure · Academic Flow',
     categoryStrategy: 'Strategy & Controls',
 
+    // SEO元数据
+    metaTitle: 'TypeGenAI - Intelligent Text Style Transformation Tool',
+    metaDescription: 'Drag and drop to transform, style at your fingertips. 28 professional style filters, AI-powered text style transformation tool.',
   },
 };
 

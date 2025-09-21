@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { LanguageProvider } from "@/lib/language-context";
+import ClientMetadataUpdater from "@/components/client-metadata-updater";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,11 +31,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="zh">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <LanguageProvider>
+          <ClientMetadataUpdater />
           <div className="background-wrapper">
             {children}
           </div>
