@@ -17,6 +17,7 @@ export interface TransformerController {
   showResultActions: boolean;
   targetLength: number;
   isTextTooLong: boolean;
+  isExpanding: boolean;
 
   // actions
   onTextChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
@@ -47,6 +48,7 @@ export function useTransformerController(t: (key: TranslationKey) => string): Tr
   const [showResultActions, setShowResultActions] = useState(false);
   const [targetLength, setTargetLength] = useState<number>(0);
   const [isTextTooLong, setIsTextTooLong] = useState(false);
+  const [isExpanding, setIsExpanding] = useState(false);
   const apiClient = useMemo(() => new TransformApiClient(), []);
 
   const onTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -95,6 +97,7 @@ export function useTransformerController(t: (key: TranslationKey) => string): Tr
     if (text.trim() && selectedFilter) {
       setState('transforming');
       setOriginalText(text);
+      setIsExpanding(true);
       try {
         const result = await apiClient.transformText(
           text,
@@ -104,18 +107,22 @@ export function useTransformerController(t: (key: TranslationKey) => string): Tr
         if (result.success && result.data) {
           setText(result.data.transformedText);
           setState('transformed');
+          setTimeout(() => setIsExpanding(false), 600);
           setShowResultActions(true);
         } else {
           alert(`${t('transformFailed')}: ${result.error?.message || t('unknownError')}`);
           setState('readyToTransform');
+          setIsExpanding(false);
         }
       } catch (error: unknown) {
         const err = error as { message?: string };
         alert(`${t('networkError')}: ${err.message || t('unknownError')}`);
         setState('readyToTransform');
+        setIsExpanding(false);
       }
     } else {
       setState('readyToTransform');
+      setIsExpanding(false);
     }
   }, [apiClient, selectedFilter, t, targetLength, text]);
 
@@ -133,6 +140,7 @@ export function useTransformerController(t: (key: TranslationKey) => string): Tr
     setState('readyToTransform');
     setShowResultActions(false);
     setSelectedFilter(null);
+    setIsExpanding(false);
   }, [originalText]);
 
   const onRestart = useCallback(() => {
@@ -142,6 +150,7 @@ export function useTransformerController(t: (key: TranslationKey) => string): Tr
     setShowResultActions(false);
     setSelectedFilter(null);
     setDroppedFilter(null);
+    setIsExpanding(false);
   }, []);
 
   return {
@@ -155,6 +164,7 @@ export function useTransformerController(t: (key: TranslationKey) => string): Tr
     showResultActions,
     targetLength,
     isTextTooLong,
+    isExpanding,
     onTextChange,
     onDragOver,
     onDragLeave,
@@ -168,4 +178,3 @@ export function useTransformerController(t: (key: TranslationKey) => string): Tr
     setTargetLength,
   };
 }
-

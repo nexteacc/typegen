@@ -25,6 +25,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
     showResultActions,
     targetLength,
     isTextTooLong,
+    isExpanding,
     onTextChange,
     onDragOver,
     onDragLeave,
@@ -160,6 +161,23 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                 transition={{ type: 'spring', stiffness: 160, damping: 18 }}
                 className="flex flex-col items-center"
               >
+                <motion.div
+                  layout
+                  className="relative mb-4 flex w-full justify-center"
+                >
+                  <motion.div
+                    layout
+                    initial={{ width: 576 }}
+                    animate={{ width: isExpanding ? 1200 : 1200 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: isExpanding ? 120 : 220,
+                      damping: isExpanding ? 18 : 26,
+                      duration: isExpanding ? 0.6 : 0.2
+                    }}
+                    className="h-[8px] rounded-full bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-300 shadow-[0_0_40px_rgba(56,189,248,0.35)]"
+                  />
+                </motion.div>
                 <div className="flex flex-nowrap items-stretch justify-center gap-6 lg:gap-8">
                   <motion.div
                     layout
