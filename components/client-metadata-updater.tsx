@@ -17,7 +17,7 @@ export default function ClientMetadataUpdater() {
     document.title = t('metaTitle');
     
     // 更新页面描述
-    let metaDescription = document.querySelector('meta[name="description"]');
+    const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
       (metaDescription as HTMLMetaElement).content = t('metaDescription');
     } else {

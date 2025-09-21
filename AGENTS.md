@@ -20,6 +20,11 @@
 - Tailwind is the primary styling tool; keep custom CSS in `app/globals.css` minimal.
 - Run `pnpm lint` before sending changes; no autoformatter is enforced, so respect ESLint guidance.
 
+## Avoid Over-Engineering
+- Prefer the simplest viable abstraction; only introduce additional component or service layers when they address a demonstrated need.
+- Keep sizing and spacing responsibilities clearly owned by specific components to prevent layout drift across the tree.
+- Reuse the shared layout system (Tailwind utility patterns, established layout helpers) instead of creating ad-hoc grids or spacing conventions.
+
 ## Testing Guidelines
 - No automated test suite is present. Add unit or integration tests when introducing complex logic and document how to run them.
 - For UI changes, capture manual verification steps (screenshots or notes) in the PR.
