@@ -5,6 +5,7 @@ import { cn } from "@/utils/cn";
 import { LengthControl } from "@/components/length-control";
 import { FilterIconsContainer, TextBoxSnapEffect, LightSweepEffect } from "@/components/style-filter";
 import type { TransformerController } from "@/lib/use-transformer-controller";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface DesktopLayoutProps {
   controller: TransformerController;
@@ -44,7 +45,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
         <div
           className={cn(
             "relative mx-auto transition-all duration-500",
-            state === "transformed" ? "max-w-4xl" : "max-w-xl"
+            state === "transformed" ? "max-w-[1200px]" : "max-w-xl"
           )}
         >
           {state !== "transformed" && (
@@ -112,51 +113,89 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
             </>
           )}
 
-          {state === "transformed" && (
-            <div className="flex justify-center gap-8">
-              <div className="w-full max-w-md">
-                <div className="mb-4 text-center text-sm font-medium text-gray-500">
-                  {t('originalText')}
-                </div>
-                <div
-                  className={cn(
-                    "w-full min-h-[320px] bg-gray-50 p-5",
-                    "border-2 border-gray-200 transition-all duration-300 container-rounded"
-                  )}
+          <AnimatePresence mode="wait">
+            {state === "transformed" && (
+              <motion.div
+                key="result-panels"
+                layout
+                initial={{ opacity: 0, scale: 0.95, y: 32 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.97, y: 24 }}
+                transition={{ type: 'spring', stiffness: 160, damping: 18 }}
+                className="flex flex-wrap justify-center gap-8"
+              >
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.08, type: 'spring', stiffness: 180, damping: 20 }}
+                  className="flex w-[576px] flex-col"
                 >
-                  <textarea
-                    className="w-full flex-1 border-none bg-transparent input-rounded resize-none text-left text-base text-gray-600 outline-none"
-                    style={{ borderRadius: '16px', minHeight: '300px' }}
-                    value={originalText}
-                    readOnly
-                  />
-                </div>
-              </div>
+                  <div className="mb-4 text-center text-sm font-medium text-gray-500">
+                    {t('originalText')}
+                  </div>
+                  <motion.div
+                    layout
+                    className={cn(
+                      "w-full bg-gray-50 p-5",
+                      "border-2 border-gray-200 transition-all duration-300 container-rounded"
+                    )}
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.12, type: 'spring', stiffness: 220, damping: 22 }}
+                    style={{ borderRadius: '20px', height: '280px', width: '576px' }}
+                  >
+                    <textarea
+                      className="h-full w-full border-none bg-transparent input-rounded resize-none text-left text-base text-gray-600 outline-none"
+                      style={{ borderRadius: '16px' }}
+                      value={originalText}
+                      readOnly
+                    />
+                  </motion.div>
+                </motion.div>
 
-              <div className="flex h-full min-h-[320px] w-12 items-center justify-center">
-                <div className="text-4xl text-green-500 animate-pulse">→</div>
-              </div>
-
-              <div className="w-full max-w-md">
-                <div className="mb-4 text-center text-sm font-medium text-green-600">
-                  {t('transformedResult')} ({selectedFilter?.name})
-                </div>
-                <div
-                  className={cn(
-                    "w-full min-h-[320px] bg-transparent p-5",
-                    "border-2 border-solid border-green-500 shadow-glow container-rounded"
-                  )}
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1, type: 'spring', stiffness: 240, damping: 16 }}
+                  className="flex h-[280px] w-12 items-center justify-center"
                 >
-                  <textarea
-                    className="w-full flex-1 border-none bg-transparent input-rounded resize-none text-left text-base outline-none"
-                    style={{ borderRadius: '16px', minHeight: '300px' }}
-                    value={text}
-                    readOnly
-                  />
-                </div>
-              </div>
-            </div>
-          )}
+                  <div className="text-4xl text-green-500 animate-pulse">→</div>
+                </motion.div>
+
+                <motion.div
+                  layout
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.18, type: 'spring', stiffness: 180, damping: 20 }}
+                  className="flex w-[576px] flex-col"
+                >
+                  <div className="mb-4 text-center text-sm font-medium text-green-600">
+                    {t('transformedResult')} ({selectedFilter?.name})
+                  </div>
+                  <motion.div
+                    layout
+                    className={cn(
+                      "w-full bg-transparent p-5",
+                      "border-2 border-solid border-green-500 shadow-glow container-rounded"
+                    )}
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.22, type: 'spring', stiffness: 240, damping: 19 }}
+                    style={{ borderRadius: '20px', height: '280px', width: '576px' }}
+                  >
+                    <textarea
+                      className="h-full w-full border-none bg-transparent input-rounded resize-none text-left text-base outline-none"
+                      style={{ borderRadius: '16px' }}
+                      value={text}
+                      readOnly
+                    />
+                  </motion.div>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {showResultActions && state === "transformed" && (
             <div className="mt-8 flex justify-center gap-4">
