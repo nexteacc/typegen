@@ -43,15 +43,15 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
       <div className="flex w-full flex-1 flex-col items-center px-4 pb-6 pt-4 sm:px-6 md:px-8 md:pb-10 md:pt-8">
         <div
           className={cn(
-            "relative w-full max-w-2xl transition-all duration-500 sm:max-w-3xl",
-            state === "transformed" ? "lg:max-w-5xl" : "lg:max-w-3xl"
+            "relative mx-auto w-full max-w-2xl transition-all duration-500",
+            state === "transformed" ? "lg:max-w-3xl" : "lg:max-w-2xl"
           )}
         >
           {state !== "transformed" && (
             <div className="relative">
               <div
                 className={cn(
-                  "relative flex min-h-[200px] w-full items-stretch justify-center bg-transparent p-4",
+                  "relative mx-auto flex min-h-[200px] w-full max-w-xl items-stretch justify-center bg-transparent p-4",
                   "border-2 border-dashed border-gray-300 transition-all duration-300",
                   "container-rounded",
                   isOver && "border-solid border-blue-500 shadow-glow",
@@ -92,7 +92,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
               </div>
 
               {isTextTooLong && (
-                <div className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 sm:px-4 sm:py-3">
+                <div className="mx-auto mt-3 max-w-xl rounded-lg border border-red-200 bg-red-50 px-3 py-2 sm:px-4 sm:py-3">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-medium text-red-500 sm:text-sm">
                       {t('textTooLongWarning')}
@@ -106,51 +106,50 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                   originalLength={text.length}
                   value={targetLength}
                   onChange={setTargetLength}
-                  className="mt-5 sm:mt-6"
+                  className="mt-5 sm:mt-6 max-w-lg mx-auto"
                 />
               )}
             </div>
           )}
 
           {state === "transformed" && (
-            <div className="flex flex-col gap-6 md:flex-row md:gap-8">
-              <div className="flex-1">
+            <div className="flex flex-col items-center gap-6 lg:flex-row lg:justify-center lg:gap-10">
+              <div className="w-full max-w-lg">
                 <div className="mb-3 text-center text-xs font-medium text-gray-500 sm:text-sm">
                   {t('originalText')}
                 </div>
-                <div className={cn(
-                  "w-full min-h-[200px] bg-gray-50 p-4",
-                  "border-2 border-gray-200 transition-all duration-300 container-rounded"
-                )}
+                <div
+                  className={cn(
+                    "w-full min-h-[240px] bg-gray-50 p-4",
+                    "border-2 border-gray-200 transition-all duration-300 container-rounded"
+                  )}
                 >
                   <textarea
                     className="w-full flex-1 border-none bg-transparent input-rounded resize-none text-left text-sm text-gray-600 outline-none sm:text-base"
-                    style={{ borderRadius: '16px', minHeight: '180px' }}
+                    style={{ borderRadius: '16px', minHeight: '220px' }}
                     value={originalText}
                     readOnly
                   />
                 </div>
               </div>
 
-              <div className="hidden items-center justify-center md:flex">
+              <div className="hidden lg:flex lg:h-full lg:min-h-[240px] lg:w-8 lg:items-center lg:justify-center">
                 <div className="text-3xl text-green-500 animate-pulse">→</div>
               </div>
-              <div className="flex items-center justify-center md:hidden">
-                <div className="text-2xl text-green-500 animate-pulse">↓</div>
-              </div>
 
-              <div className="flex-1">
+              <div className="w-full max-w-lg">
                 <div className="mb-3 text-center text-xs font-medium text-green-600 sm:text-sm">
                   {t('transformedResult')} ({selectedFilter?.name})
                 </div>
-                <div className={cn(
-                  "w-full min-h-[200px] bg-transparent p-4",
-                  "border-2 border-solid border-green-500 shadow-glow container-rounded"
-                )}
+                <div
+                  className={cn(
+                    "w-full min-h-[240px] bg-transparent p-4",
+                    "border-2 border-solid border-green-500 shadow-glow container-rounded"
+                  )}
                 >
                   <textarea
                     className="w-full flex-1 border-none bg-transparent input-rounded resize-none text-left text-sm outline-none sm:text-base"
-                    style={{ borderRadius: '16px', minHeight: '180px' }}
+                    style={{ borderRadius: '16px', minHeight: '220px' }}
                     value={text}
                     readOnly
                   />
