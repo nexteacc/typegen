@@ -9,4 +9,4 @@ export * from './filter-icon';
 export * from './filter-container';
 export * from './snap-effect';
 export * from './light-sweep-effect';
-export * from './mobile-filter-sheet';
+export * from './text-box-snap-effect';

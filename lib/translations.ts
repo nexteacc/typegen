@@ -11,7 +11,6 @@ export const translations = {
     copyText: '📋 复制文本',
     restart: '🔄 重新开始',
     tryOtherStyle: '🎨 尝试其他风格',
-    openFilterSheet: '🎯 选择滤镜',
 
     // 界面标签
     pasteTextHere: '在此粘贴文本',
@@ -25,7 +24,6 @@ export const translations = {
     readyToTransform: '准备转换',
     transforming: '转换中...',
     transformed: '转换完成',
-    tapFilterHint: '点击下方按钮选择滤镜并开始转换',
 
     // 字数控制
     concise: '📝 简洁',
@@ -56,7 +54,6 @@ export const translations = {
     // 语言切换
     switchToEnglish: '🌍 English',
     switchToChinese: '🌍 中文',
-    close: '关闭',
 
     // 长度控制提示
     lengthControlHint: '调整目标文本长度',
@@ -74,8 +71,6 @@ export const translations = {
     categoryStructureAcademic: '结构 · 学术',
     categoryStrategy: '策略 · 传播',
 
-    // 移动端弹层
-    filterSelectionTitle: '选择滤镜',
   },
   
   en: {
@@ -84,7 +79,6 @@ export const translations = {
     copyText: '📋 Copy Text',
     restart: '🔄 Restart',
     tryOtherStyle: '🎨 Try Other Style',
-    openFilterSheet: '🎯 Choose Filter',
 
     // 界面标签
     pasteTextHere: 'Paste text here',
@@ -98,7 +92,6 @@ export const translations = {
     readyToTransform: 'Ready to transform',
     transforming: 'Transforming...',
     transformed: 'Transformed',
-    tapFilterHint: 'Tap the button below to choose a filter',
     
     // 字数控制
     concise: '📝 Concise',
@@ -129,7 +122,6 @@ export const translations = {
     // 语言切换
     switchToEnglish: '🌍 English',
     switchToChinese: '🌍 中文',
-    close: 'Close',
 
     // 长度控制提示
     lengthControlHint: 'Adjust target text length',
@@ -147,8 +139,6 @@ export const translations = {
     categoryStructureAcademic: 'Structure · Academic Flow',
     categoryStrategy: 'Strategy & Controls',
 
-    // 移动端弹层
-    filterSelectionTitle: 'Choose a style filter',
   },
 };
 
