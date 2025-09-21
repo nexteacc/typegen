@@ -1,12 +1,12 @@
-# 文本风格滤镜库
+# Text Style Filter Library
 
-> 目标：把现有“写作风格关键词”按三层结构重排为 **文体风格（Style） / 结构模板（Structure） / 策略与参数（Strategy & Controls）**，并同步 `filters-data.ts`、`SUPPORTED_STYLES`、图标资源的命名。
+> Goal: Reorganize existing "writing style keywords" into a three-tier structure: **Style / Structure / Strategy & Controls**, and synchronize with `filters-data.ts`, `SUPPORTED_STYLES`, and icon resource naming.
 
 ---
 
-## A. 文体风格（Style）
+## A. Style
 
-| 显示名称 | API 参数 | 图标文件 |
+| Display Name | API Parameter | Icon File |
 | --- | --- | --- |
 | **AP Style** | `ap-style` | `/icons/ap-style.png` |
 | **APA Style** | `apa-style` | `/icons/APA-style.svg` |
@@ -23,9 +23,9 @@
 
 ---
 
-## B. 结构模板（Structure）
+## B. Structure
 
-| 显示名称 | API 参数 | 图标文件 |
+| Display Name | API Parameter | Icon File |
 | --- | --- | --- |
 | **Inverted Pyramid** | `inverted-pyramid` | `/icons/inverted-pyramid.png` |
 | **Headline Driven** | `headline-driven` | `/icons/Headline-driven.png` |
@@ -37,9 +37,9 @@
 
 ---
 
-## C. 策略与参数（Strategy & Controls）
+## C. Strategy & Controls
 
-| 显示名称 | API 参数 | 图标文件 |
+| Display Name | API Parameter | Icon File |
 | --- | --- | --- |
 | **Clickbait** | `clickbait` | `/icons/Clickbait.png` |
 | **Call to Action** | `call-to-action` | `/icons/Call-to-Action.png` |
@@ -53,7 +53,7 @@
 
 ---
 
-> 维护说明：
-> - 新增风格时，请同时更新本表、`components/style-filter/filters-data.ts`、`lib/api-types.ts`、`lib/openai-service.ts` 以及配套图标资源。
-> - 文档中的“显示名称”与 README、UI 展示一致；“API 参数”对应 `apiParameter` / `SUPPORTED_STYLES` 键值。
-> - 图标统一存放在 `public/icons/`，命名遵循短横线（kebab-case）或首字母大写（SVG）约定。
+> Maintenance Notes:
+> - When adding new styles, please update this table, `components/style-filter/filters-data.ts`, `lib/api-types.ts`, `lib/openai-service.ts`, and corresponding icon resources simultaneously.
+> - "Display Name" in the documentation should match README and UI display; "API Parameter" corresponds to `apiParameter` / `SUPPORTED_STYLES` key values.
+> - Icons are stored uniformly in `public/icons/`, following kebab-case or capitalized (SVG) naming conventions.
