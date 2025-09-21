@@ -11,7 +11,8 @@ export const translations = {
     copyText: '📋 复制文本',
     restart: '🔄 重新开始',
     tryOtherStyle: '🎨 尝试其他风格',
-    
+    openFilterSheet: '🎯 选择滤镜',
+
     // 界面标签
     pasteTextHere: '在此粘贴文本',
     originalText: '原始文本',
@@ -24,7 +25,8 @@ export const translations = {
     readyToTransform: '准备转换',
     transforming: '转换中...',
     transformed: '转换完成',
-    
+    tapFilterHint: '点击下方按钮选择滤镜并开始转换',
+
     // 字数控制
     concise: '📝 简洁',
     summary: '📋 摘要', 
@@ -33,7 +35,7 @@ export const translations = {
     
     // 成功消息
     copySuccess: '文本已复制到剪贴板！',
-    
+
     // 错误消息
     textTooLongWarning: '⚠️ 文本长度超过5000字符限制，请缩短您的文本',
     copyFailed: '复制失败，请手动复制文本',
@@ -54,10 +56,11 @@ export const translations = {
     // 语言切换
     switchToEnglish: '🌍 English',
     switchToChinese: '🌍 中文',
-    
+    close: '关闭',
+
     // 长度控制提示
     lengthControlHint: '调整目标文本长度',
-    
+
     // 应用信息
     appTitle: 'TypeGenAI',
     appDescription: '智能文本风格转换工具，支持多种写作风格转换',
@@ -70,6 +73,9 @@ export const translations = {
     categoryStructureList: '结构 · 列表',
     categoryStructureAcademic: '结构 · 学术',
     categoryStrategy: '策略 · 传播',
+
+    // 移动端弹层
+    filterSelectionTitle: '选择滤镜',
   },
   
   en: {
@@ -78,7 +84,8 @@ export const translations = {
     copyText: '📋 Copy Text',
     restart: '🔄 Restart',
     tryOtherStyle: '🎨 Try Other Style',
-    
+    openFilterSheet: '🎯 Choose Filter',
+
     // 界面标签
     pasteTextHere: 'Paste text here',
     originalText: 'Original Text',
@@ -91,6 +98,7 @@ export const translations = {
     readyToTransform: 'Ready to transform',
     transforming: 'Transforming...',
     transformed: 'Transformed',
+    tapFilterHint: 'Tap the button below to choose a filter',
     
     // 字数控制
     concise: '📝 Concise',
@@ -100,7 +108,7 @@ export const translations = {
     
     // 成功消息
     copySuccess: 'Text copied to clipboard!',
-    
+
     // 错误消息
     textTooLongWarning: '⚠️ Text exceeds 5000 character limit. Please shorten your text.',
     copyFailed: 'Copy failed, please copy text manually',
@@ -121,10 +129,11 @@ export const translations = {
     // 语言切换
     switchToEnglish: '🌍 English',
     switchToChinese: '🌍 中文',
-    
+    close: 'Close',
+
     // 长度控制提示
     lengthControlHint: 'Adjust target text length',
-    
+
     // 应用信息
     appTitle: 'TypeGenAI',
     appDescription: 'AI-powered text style transformation tool with multiple writing styles',
@@ -137,6 +146,9 @@ export const translations = {
     categoryStructureList: 'Structure · Lists & Threads',
     categoryStructureAcademic: 'Structure · Academic Flow',
     categoryStrategy: 'Strategy & Controls',
+
+    // 移动端弹层
+    filterSelectionTitle: 'Choose a style filter',
   },
 };
 

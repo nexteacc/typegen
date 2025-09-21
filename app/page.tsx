@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { StyleFilter, TransformerState, FilterIconsContainer } from "@/components/style-filter";
+import { StyleFilter, TransformerState, FilterIconsContainer, MobileFilterSheet } from "@/components/style-filter";
 import { TextBoxSnapEffect } from "@/components/style-filter/text-box-snap-effect";
 import { LightSweepEffect } from "@/components/style-filter/light-sweep-effect";
 import { TransformApiClient } from "@/lib/api-client";
 import { LengthControl } from "@/components/length-control";
 import { LanguageToggle } from "@/components/language-toggle";
 import { useTranslation } from "@/lib/use-translation";
+import { useMediaQuery } from "@/lib/use-media-query";
 import { cn } from "@/utils/cn";
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
   const [targetLength, setTargetLength] = useState<number>(0);
   const [isTextTooLong, setIsTextTooLong] = useState(false);
   const [apiClient] = useState(() => new TransformApiClient());
+  const isDesktop = useMediaQuery('(min-width: 768px)', true);
 
   // 处理文本输入
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -62,6 +64,17 @@ export default function Home() {
     setIsOver(false);
   };
 
+  const startFilterTransformation = (filter: StyleFilter) => {
+    setSelectedFilter(filter);
+
+    if (text.trim()) {
+      setState("transforming");
+    }
+
+    setShowResultActions(false);
+    setDroppedFilter(filter);
+  };
+
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsOver(false);
@@ -69,13 +82,7 @@ export default function Home() {
     const filterData = e.dataTransfer.getData('application/json');
     if (filterData) {
       const draggedFilter = JSON.parse(filterData) as StyleFilter;
-
-      setSelectedFilter(draggedFilter);
-
-      if (text.trim()) {
-        setState("transforming");
-      }
-      setDroppedFilter(draggedFilter);
+      startFilterTransformation(draggedFilter);
     }
   };
 
@@ -247,7 +254,7 @@ export default function Home() {
 
           {/* 转换后：双栏对比布局 */}
           {state === "transformed" && (
-            <div className="flex flex-col gap-6 md:flex-row md:gap-8">
+          <div className="flex flex-col gap-6 md:flex-row md:gap-8">
               <div className="flex-1">
                 <div className="mb-3 text-center text-xs font-medium text-gray-500 sm:text-sm">
                   {t('originalText')}
@@ -326,19 +333,26 @@ export default function Home() {
         {/* 提示信息 */}
         {state === 'readyToTransform' && (
           <div className="mt-6 px-4 text-center text-sm text-gray-500 sm:mt-8">
-            {t('dragFilterHint')}
+            {isDesktop ? t('dragFilterHint') : t('tapFilterHint')}
           </div>
         )}
       </div>
 
       {/* 底部滤镜工具栏 */}
       <div className="w-full bg-gray-50/40 px-3 pb-4 pt-3 sm:px-6 md:pb-6">
-        <FilterIconsContainer
-          state={state}
-          selectedFilter={selectedFilter}
-          onFilterSelect={handleFilterSelect}
-          onSnapComplete={handleSnapComplete}
-        />
+        {isDesktop ? (
+          <FilterIconsContainer
+            state={state}
+            selectedFilter={selectedFilter}
+            onFilterSelect={handleFilterSelect}
+            onSnapComplete={handleSnapComplete}
+          />
+        ) : (
+          <MobileFilterSheet
+            state={state}
+            onFilterSelect={startFilterTransformation}
+          />
+        )}
       </div>
     </div>
   );
