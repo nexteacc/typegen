@@ -1,3 +1,35 @@
+
+<div align="right">
+  <details>
+    <summary >🌐 Language</summary>
+    <div>
+      <div align="center">
+        <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=en">English</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=zh-CN">简体中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=zh-TW">繁體中文</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=ja">日本語</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=ko">한국어</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=hi">हिन्दी</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=th">ไทย</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=fr">Français</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=de">Deutsch</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=es">Español</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=it">Italiano</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=ru">Русский</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=pt">Português</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=nl">Nederlands</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=pl">Polski</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=ar">العربية</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=fa">فارسی</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=tr">Türkçe</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=vi">Tiếng Việt</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=id">Bahasa Indonesia</a>
+        | <a href="https://openaitx.github.io/view.html?user=nexteacc&project=typegen&lang=as">অসমীয়া</
+      </div>
+    </div>
+  </details>
+</div>
+
 # TypeGen - 智能文本风格转换工具
 
 TypeGen 是一个基于 Next.js 的现代化 AI 驱动文本风格转换应用。通过集成 OpenAI API，提供多维度的写作风格、结构模板与策略参数之间的智能转换，并配备直观的拖拽式交互界面。
