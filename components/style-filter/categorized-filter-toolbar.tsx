@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '@/utils/cn';
 import { StyleFilter, TransformerState } from './types';
 import {
@@ -11,10 +11,12 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@/components/ui/tooltip';
+import { NavBar } from '@/components/ui/tubelight-navbar';
 
 interface FilterCategory {
   id: string;
   name: string;
+  shortName: string;
   emoji: string;
   filters: StyleFilter[];
 }
@@ -29,8 +31,7 @@ interface CategorizedFilterToolbarProps {
 }
 
 /**
- * 按分类展示的滤镜工具栏
- * 支持小屏滚动与大屏整行布局
+ * 滤镜工具栏：使用导航切换不同类别
  */
 export function CategorizedFilterToolbar({
   categories,
@@ -40,6 +41,34 @@ export function CategorizedFilterToolbar({
   state,
   className
 }: CategorizedFilterToolbarProps) {
+  const [activeCategoryId, setActiveCategoryId] = React.useState(() => categories[0]?.id ?? '');
+
+  React.useEffect(() => {
+    if (!categories.length) {
+      setActiveCategoryId('');
+      return;
+    }
+    const exists = categories.some((category) => category.id === activeCategoryId);
+    if (!exists) {
+      setActiveCategoryId(categories[0]?.id ?? '');
+    }
+  }, [categories, activeCategoryId]);
+
+  const navItems = React.useMemo(
+    () =>
+      categories.map((category) => ({
+        name: category.shortName,
+        value: category.id,
+        emoji: category.emoji,
+      })),
+    [categories]
+  );
+
+  const activeCategory = React.useMemo(
+    () => categories.find((category) => category.id === activeCategoryId) ?? categories[0] ?? null,
+    [categories, activeCategoryId]
+  );
+
   return (
     <TooltipProvider delayDuration={150} skipDelayDuration={200}>
       <div
@@ -49,25 +78,35 @@ export function CategorizedFilterToolbar({
           className
         )}
       >
-        <div className="flex flex-col gap-4">
-          {categories.map((category, categoryIndex) => (
+        <div className="flex justify-center">
+          <NavBar
+            items={navItems}
+            floating={false}
+            size="lg"
+            className="mb-8"
+            innerClassName="gap-4"
+            value={activeCategoryId}
+            onValueChange={(value) => setActiveCategoryId(value)}
+          />
+        </div>
+
+        <AnimatePresence mode="wait" initial={false}>
+          {activeCategory && (
             <motion.div
-              key={category.id}
-              initial={{ opacity: 0, y: 20 }}
+              key={activeCategory.id}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: categoryIndex * 0.08 }}
-              className="flex flex-col gap-3 md:flex-row md:items-center"
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25 }}
+              className="mt-10"
             >
-              {/* 类别标签 */}
-              <div className="flex items-center gap-2 text-sm font-medium text-gray-600 md:w-32">
-                <span className="text-base">{category.emoji}</span>
-                <span className="whitespace-nowrap">{category.name}</span>
+              <div className="mb-4 flex items-center justify-center gap-2 text-sm font-medium text-gray-600">
+                <span className="text-base" aria-hidden="true">{activeCategory.emoji}</span>
+                <span>{activeCategory.name}</span>
               </div>
 
-              <div
-                className="flex gap-3 overflow-x-auto pb-2 md:flex-wrap md:gap-5 md:overflow-visible md:pb-0"
-              >
-                {category.filters.map((filter) => (
+              <div className="flex flex-wrap justify-center gap-3 overflow-x-auto pb-2 md:gap-5 md:overflow-visible md:pb-0">
+                {activeCategory.filters.map((filter) => (
                   <FilterIcon
                     key={filter.id}
                     filter={filter}
@@ -80,8 +119,8 @@ export function CategorizedFilterToolbar({
                 ))}
               </div>
             </motion.div>
-          ))}
-        </div>
+          )}
+        </AnimatePresence>
       </div>
     </TooltipProvider>
   );

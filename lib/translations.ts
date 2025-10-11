@@ -71,6 +71,15 @@ export const translations = {
     categoryStructureAcademic: '结构 · 学术',
     categoryStrategy: '策略 · 传播',
 
+    // 滤镜类别短标签
+    categoryShortStyleNews: '学术',
+    categoryShortStyleSocial: '社交',
+    categoryShortStyleCreative: '写作',
+    categoryShortStructureNews: '新闻',
+    categoryShortStructureList: '列表',
+    categoryShortStructureAcademic: '学术结构',
+    categoryShortStrategy: '策略',
+
     // SEO元数据
     metaTitle: 'TypeGenAI - 智能文本风格转换工具',
     metaDescription: '拖拽即转换，风格由你选。28种专业风格滤镜，AI驱动的文本风格转换工具。',
@@ -141,6 +150,15 @@ export const translations = {
     categoryStructureList: 'Structure · Lists & Threads',
     categoryStructureAcademic: 'Structure · Academic Flow',
     categoryStrategy: 'Strategy & Controls',
+
+    // Filter category short labels
+    categoryShortStyleNews: 'Academic',
+    categoryShortStyleSocial: 'Social',
+    categoryShortStyleCreative: 'Creative',
+    categoryShortStructureNews: 'News',
+    categoryShortStructureList: 'Lists',
+    categoryShortStructureAcademic: 'Scholarly',
+    categoryShortStrategy: 'Strategy',
 
     // SEO元数据
     metaTitle: 'TypeGenAI - Intelligent Text Style Transformation Tool',
