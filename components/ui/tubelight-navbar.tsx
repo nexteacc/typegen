@@ -57,19 +57,19 @@ export function NavBar({
   if (!items.length) return null
 
 const sizeClasses: Record<NavBarSize, string> = {
-  sm: "gap-3 px-4 py-1.5",
-  md: "gap-4 px-5 py-2",
-  lg: "gap-5 px-6 py-2.5",
+  sm: "px-5 py-1.75",
+  md: "px-7 py-2.25",
+  lg: "px-8 py-2.75",
 }
 
 const itemSizeClasses: Record<NavBarSize, string> = {
   sm: "px-3 py-1.5",
   md: "px-4 py-2",
-  lg: "px-6 py-3",
+  lg: "px-5 py-3",
 }
 
 const emojiSizeClasses: Record<NavBarSize, string> = {
-    sm: "text-xl",
+  sm: "text-xl",
     md: "text-2xl",
     lg: "text-3xl",
   }
@@ -87,13 +87,13 @@ const emojiSizeClasses: Record<NavBarSize, string> = {
     className
   )
 
-  const nonFloatingBase = "inline-flex max-w-full items-center overflow-x-auto rounded-full border border-slate-200/70 bg-white/80 shadow-[0_10px_30px_rgba(8,47,73,0.12)] supports-[backdrop-filter]:backdrop-blur"
+  const nonFloatingBase = "inline-flex max-w-full items-center rounded-full border border-slate-200/70 bg-white/85 shadow-[0_12px_38px_rgba(15,23,42,0.12)] supports-[backdrop-filter]:backdrop-blur"
   const floatingBase = "flex items-center rounded-full border border-border bg-background/5 shadow-lg supports-[backdrop-filter]:backdrop-blur"
 
   const barClassName = cn(
     floating ? floatingBase : nonFloatingBase,
     sizeClasses[size],
-    !floating && "w-full max-w-[680px] justify-center",
+    !floating && "w-full max-w-[700px] justify-between",
     innerClassName
   )
 
@@ -123,13 +123,13 @@ const emojiSizeClasses: Record<NavBarSize, string> = {
         href={item.url ?? "#"}
         onClick={(event) => handleSelect(event, item)}
         className={cn(
-          "relative shrink-0 cursor-pointer rounded-full transition-colors no-underline",
+          "relative flex basis-0 cursor-pointer flex-col items-center rounded-full transition-colors no-underline flex-1",
           itemSizeClasses[size],
           "text-foreground/80 hover:text-primary",
           isActive && "bg-muted text-primary"
         )}
       >
-        <span className="flex min-w-[104px] flex-col items-center gap-2 leading-tight text-center">
+        <span className="flex min-w-[80px] max-w-[110px] flex-col items-center gap-2 leading-tight text-center">
           {item.emoji ? (
             <span className={cn("leading-none", emojiSizeClasses[size])} aria-hidden="true">
               {item.emoji}
