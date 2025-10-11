@@ -329,6 +329,32 @@
   }
 }
 
+/* 星星旋转动画 */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.star-spin {
+  animation: spin 1.5s linear infinite;
+}
+
+.star-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+.star-spin-fast {
+  animation: spin 0.8s linear infinite;
+}
+
+.star-spin-super-fast {
+  animation: spin 0.5s linear infinite;
+}
+
 .footer-arrow {
   position: relative;
   display: block;

@@ -14,7 +14,7 @@ export function SiteFooter() {
             alt="Star"
             width={52}
             height={52}
-            className="-ml-3 translate-y-[1px] flex-shrink-0"
+            className="-ml-3 translate-y-[1px] flex-shrink-0 star-spin"
             priority
           />
         </div>
