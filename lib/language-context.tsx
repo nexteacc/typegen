@@ -22,11 +22,9 @@ interface LanguageProviderProps {
 
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>('en');
-  const [isHydrated, setIsHydrated] = useState(false);
 
   // 从localStorage加载用户语言偏好
   useEffect(() => {
-    setIsHydrated(true);
     const saved = localStorage.getItem('typegen-language');
     if (saved === 'zh' || saved === 'en') {
       setLanguageState(saved);
