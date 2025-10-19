@@ -74,17 +74,16 @@ export function CategorizedFilterToolbar({
       <div
         data-transformer-state={state}
         className={cn(
-          "mx-auto w-full max-w-3xl px-5 py-6 sm:px-6 md:max-w-4xl md:px-8 lg:max-w-5xl",
+          "mx-auto w-full max-w-3xl px-5 py-4 sm:px-6 md:max-w-4xl md:px-8 lg:max-w-5xl",
           className
         )}
       >
-        <div className="flex justify-center">
+        <div className="flex justify-center mb-6">
           <NavBar
             items={navItems}
             floating={false}
-            size="lg"
-            className="mb-12"
-            innerClassName="gap-6"
+            size="sm"
+            innerClassName="gap-3"
             value={activeCategoryId}
             onValueChange={(value) => setActiveCategoryId(value)}
           />
@@ -98,14 +97,13 @@ export function CategorizedFilterToolbar({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.25 }}
-              className="mt-12"
             >
-              <div className="mb-6 flex items-center justify-center gap-2 text-sm font-medium text-gray-600">
+              <div className="mb-4 flex items-center justify-center gap-2 text-xs font-medium text-gray-600">
                 <span className="text-base" aria-hidden="true">{activeCategory.emoji}</span>
                 <span>{activeCategory.name}</span>
               </div>
 
-              <div className="flex flex-wrap justify-center gap-6 overflow-x-auto pb-2 md:gap-8 md:overflow-visible md:pb-0">
+              <div className="flex flex-wrap justify-center gap-6 pb-4 md:gap-8 md:pb-4" style={{ overflow: 'visible' }}>
                 {activeCategory.filters.map((filter) => (
                   <FilterIcon
                     key={filter.id}
@@ -185,7 +183,7 @@ function FilterIcon({
           </div>
         </div>
       </TooltipTrigger>
-      <TooltipContent side="top" align="center" sideOffset={8} className="rounded-full bg-slate-900/95 px-3 py-1 text-xs text-white shadow-lg backdrop-blur">
+      <TooltipContent side="top" align="center" sideOffset={24} className="rounded-full bg-slate-900/95 px-3 py-1 text-xs text-white shadow-lg backdrop-blur">
         {filter.name}
       </TooltipContent>
     </Tooltip>

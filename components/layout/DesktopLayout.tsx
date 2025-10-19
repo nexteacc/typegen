@@ -38,14 +38,14 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
     setTargetLength,
   } = controller;
 
-  const handleSnapComplete = () => {};
+  const handleSnapComplete = () => { };
 
   return (
-    <>
+    <div className="flex h-full w-full flex-col">
       {/* 文本内容区域 */}
       <div
         className={cn(
-          "flex w-full flex-col items-center pb-8 pt-12",
+          "flex w-full flex-shrink-0 flex-col items-center pb-4 pt-12",
           state === "transformed" ? "px-4 md:px-6 lg:px-8" : "px-6 md:px-8"
         )}
       >
@@ -141,7 +141,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 12 }}
                     transition={{ delay: 0.1, duration: 0.25 }}
-                    className="mt-10 w-full"
+                    className="mt-6 w-full"
                   >
                     <LengthControl
                       originalLength={text.length}
@@ -277,15 +277,12 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
         </div>
 
         {state === 'readyToTransform' && (
-          <div className="mt-12 text-center text-base text-gray-500">{t('dragFilterHint')}</div>
+          <div className="mt-6 text-center text-sm text-gray-500">{t('dragFilterHint')}</div>
         )}
       </div>
 
-      {/* 弹性空间1 - 文本框和滤镜之间 */}
-      <div className="flex-1 min-h-[40px]" />
-
-      {/* 滤镜导航栏 */}
-      <div className="w-full bg-gray-50/40 px-6 pb-12 pt-12">
+      {/* 滤镜导航栏 - 固定在底部 */}
+      <div className="mt-auto w-full flex-shrink-0 px-6 pb-6 pt-4">
         <FilterIconsContainer
           state={state}
           selectedFilter={selectedFilter}
@@ -293,9 +290,6 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
           onSnapComplete={handleSnapComplete}
         />
       </div>
-
-      {/* 弹性空间2 - 滤镜和底部之间 */}
-      <div className="flex-1 min-h-[60px]" />
-    </>
+    </div>
   );
 }

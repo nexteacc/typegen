@@ -75,7 +75,7 @@ export function LengthControl({
   };
 
   return (
-    <div className={cn('w-full space-y-1', className)}>
+    <div className={cn('w-full space-y-0.5', className)}>
       {/* 标题和数字输入 - 紧凑化 */}
       <div className="flex items-center justify-between text-xs">
         <span className="text-gray-600">{t('targetLength')}:</span>
@@ -115,13 +115,7 @@ export function LengthControl({
         </div>
       </div>
 
-      {/* 状态指示 - 紧凑化 */}
-      <div className="text-xs text-gray-500 text-center">
-        {ratio < 0.5 && t('concise')}
-        {ratio >= 0.5 && ratio < 0.8 && t('summary')} 
-        {ratio >= 0.8 && ratio <= 1.2 && t('standard')}
-        {ratio > 1.2 && t('detailed')}
-      </div>
+      {/* 状态指示 - 移除，节省空间 */}
     </div>
   );
 }

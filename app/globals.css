@@ -1,17 +1,20 @@
-@tailwind base;
+@import "tailwindcss";
 
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
-@tailwind components;
-@tailwind utilities;
 
 /* 主内容区域 */
 .main-content-wrapper {
   position: relative;
   width: 100%;
-  min-height: 150vh; /* 需要足够的高度来触发滚动 */
-  padding-bottom: 400px; /* 为 footer 留出空间 */
+  min-height: 100vh; /* 最小一个视口高度 */
+}
+
+/* 状态一：无文本时，需要额外高度来触发滚动 */
+.main-content-wrapper.empty-state {
+  min-height: 150vh;
+  padding-bottom: 400px;
 }
 
 /* 背景图片容器 */
@@ -19,26 +22,25 @@
   position: sticky;
   top: 0;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   background: url('/background.jpg') center center/cover no-repeat;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
   z-index: 1;
+  overflow-y: auto;
 }
 
 @media (max-width: 1024px) {
   .main-content-wrapper {
-    min-height: 140vh;
-    padding-bottom: 350px;
+    min-height: 100vh;
   }
 }
 
 @media (max-width: 768px) {
   .main-content-wrapper {
-    min-height: 130vh;
-    padding-bottom: 300px;
+    min-height: 100vh;
   }
 }
 
@@ -327,6 +329,15 @@
   }
 }
 
+/* 强制滤镜导航栏间距 */
+.filter-navbar-spacing {
+  margin-bottom: 128px !important;
+}
+
+.filter-category-spacing {
+  margin-bottom: 80px !important;
+}
+
 /* 星星旋转动画 */
 @keyframes spin {
   from {
@@ -398,6 +409,14 @@
 /* 当滚动到一定位置时，footer 滑出 */
 .sticky-footer-wrapper.visible {
   transform: translateY(0);
+}
+
+/* 状态二：有文本时，Footer 静态定位 */
+.sticky-footer-wrapper.static-mode {
+  position: relative;
+  transform: translateY(0);
+  transition: none;
+  box-shadow: none;
 }
 
 /* Footer 本身的样式 */
