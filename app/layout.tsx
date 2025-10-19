@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-[#f5f7fb] flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#f5f7fb]`}
       >
         <LanguageProvider>
           <ClientMetadataUpdater />

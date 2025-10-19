@@ -42,16 +42,17 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
 
   return (
     <>
+      {/* 文本内容区域 */}
       <div
         className={cn(
-          "flex w-full flex-1 flex-col items-center pb-10 pt-8",
-          state === "transformed" ? "px-0 md:px-4 lg:px-6" : "px-6 md:px-8"
+          "flex w-full flex-col items-center pb-8 pt-12",
+          state === "transformed" ? "px-4 md:px-6 lg:px-8" : "px-6 md:px-8"
         )}
       >
         <div
           className={cn(
             "relative mx-auto transition-all duration-500",
-            state === "transformed" ? "max-w-[1400px]" : "max-w-xl"
+            state === "transformed" ? "max-w-[1500px]" : "max-w-[680px]"
           )}
         >
           <AnimatePresence mode="wait" initial={false}>
@@ -74,7 +75,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                     state === "readyToTransform" && "border-solid border-blue-500 shadow-glow",
                     state === "transforming" && "border-solid border-yellow-500 shadow-glow"
                   )}
-                  style={{ borderRadius: '20px', height: '280px', width: '576px' }}
+                  style={{ borderRadius: '20px', height: '360px', width: '680px' }}
                   onDragOver={onDragOver}
                   onDragLeave={onDragLeave}
                   onDrop={onDrop}
@@ -140,7 +141,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 12 }}
                     transition={{ delay: 0.1, duration: 0.25 }}
-                    className="mt-6 w-full"
+                    className="mt-10 w-full"
                   >
                     <LengthControl
                       originalLength={text.length}
@@ -167,8 +168,8 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                 >
                   <motion.div
                     layout
-                    initial={{ width: 576 }}
-                    animate={{ width: isExpanding ? 1200 : 1200 }}
+                    initial={{ width: 680 }}
+                    animate={{ width: isExpanding ? 1420 : 1420 }}
                     transition={{
                       type: 'spring',
                       stiffness: isExpanding ? 120 : 220,
@@ -184,7 +185,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.08, type: 'spring', stiffness: 180, damping: 20 }}
-                    className="flex w-full max-w-[576px] flex-col flex-shrink-0"
+                    className="flex w-full max-w-[680px] flex-col flex-shrink-0"
                   >
                     <div className="mb-4 text-center text-sm font-medium text-gray-500">
                       {t('originalText')}
@@ -198,7 +199,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                       initial={{ opacity: 0, scale: 0.96 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.12, type: 'spring', stiffness: 220, damping: 22 }}
-                      style={{ borderRadius: '20px', height: '280px', width: '576px', maxWidth: '100%' }}
+                      style={{ borderRadius: '20px', height: '360px', width: '680px', maxWidth: '100%' }}
                     >
                       <textarea
                         className="h-full w-full border-none bg-transparent input-rounded resize-none text-left text-base text-gray-600 outline-none"
@@ -214,7 +215,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.1, type: 'spring', stiffness: 240, damping: 16 }}
-                    className="hidden h-[280px] w-10 flex-shrink-0 items-center justify-center sm:flex md:w-12"
+                    className="hidden h-[360px] w-10 flex-shrink-0 items-center justify-center sm:flex md:w-12"
                   >
                     <div className="text-4xl text-green-500 animate-pulse">→</div>
                   </motion.div>
@@ -224,7 +225,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.18, type: 'spring', stiffness: 180, damping: 20 }}
-                    className="flex w-full max-w-[576px] flex-col flex-shrink-0"
+                    className="flex w-full max-w-[680px] flex-col flex-shrink-0"
                   >
                     <div className="mb-4 text-center text-sm font-medium text-green-600">
                       {t('transformedResult')} ({selectedFilter?.name})
@@ -238,7 +239,7 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
                       initial={{ opacity: 0, scale: 0.92 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.22, type: 'spring', stiffness: 240, damping: 19 }}
-                      style={{ borderRadius: '20px', height: '280px', width: '576px', maxWidth: '100%' }}
+                      style={{ borderRadius: '20px', height: '360px', width: '680px', maxWidth: '100%' }}
                     >
                       <textarea
                         className="h-full w-full border-none bg-transparent input-rounded resize-none text-left text-base outline-none"
@@ -276,11 +277,15 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
         </div>
 
         {state === 'readyToTransform' && (
-          <div className="mt-8 text-center text-base text-gray-500">{t('dragFilterHint')}</div>
+          <div className="mt-12 text-center text-base text-gray-500">{t('dragFilterHint')}</div>
         )}
       </div>
 
-      <div className="w-full bg-gray-50/40 px-6 pb-6 pt-4">
+      {/* 弹性空间1 - 文本框和滤镜之间 */}
+      <div className="flex-1 min-h-[40px]" />
+
+      {/* 滤镜导航栏 */}
+      <div className="w-full bg-gray-50/40 px-6 pb-12 pt-12">
         <FilterIconsContainer
           state={state}
           selectedFilter={selectedFilter}
@@ -288,6 +293,9 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
           onSnapComplete={handleSnapComplete}
         />
       </div>
+
+      {/* 弹性空间2 - 滤镜和底部之间 */}
+      <div className="flex-1 min-h-[60px]" />
     </>
   );
 }

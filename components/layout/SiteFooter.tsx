@@ -2,9 +2,9 @@ import Image from "next/image";
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 w-full bg-white py-48">
+    <footer className="relative z-0 w-full bg-white py-20">
       <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center px-6 lg:px-12">
-        {/* Product Hunt Badge - 在整个 footer 内容上方 */}
+        {/* Product Hunt Badge */}
         <div className="mb-8">
           <a
             href="https://www.producthunt.com/products/typegen/reviews?utm_source=badge-product_review&utm_medium=badge&utm_source=badge-typegen"
@@ -21,7 +21,7 @@ export function SiteFooter() {
           </a>
         </div>
 
-        {/* 原来的 TYPE ★ GEN 布局 */}
+        {/* TYPE ★ GEN 品牌标识 - 保持原始大小 */}
         <div className="flex w-full items-center">
           <span className="flex-shrink-0 text-[64px] font-medium tracking-[0.35em] text-gray-900">
             TYPE

@@ -6,41 +6,39 @@
 @tailwind components;
 @tailwind utilities;
 
-.background-wrapper {
-  background: url('/background.jpg') center center/cover no-repeat;
-  border-radius: 32px;
-  padding: 24px;
+/* 主内容区域 */
+.main-content-wrapper {
+  position: relative;
   width: 100%;
-  max-width: 1200px;
-  margin: 40px auto;
-  box-sizing: border-box;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+  min-height: 150vh; /* 需要足够的高度来触发滚动 */
+  padding-bottom: 400px; /* 为 footer 留出空间 */
+}
+
+/* 背景图片容器 */
+.background-wrapper {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background: url('/background.jpg') center center/cover no-repeat;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: stretch;
-  flex: 1 1 auto;
-  min-height: clamp(560px, 70vh, 920px);
+  z-index: 1;
 }
 
 @media (max-width: 1024px) {
-  .background-wrapper {
-    padding: 20px;
-    margin: 24px auto;
-    max-width: 1000px;
-    min-height: clamp(520px, 70vh, 860px);
+  .main-content-wrapper {
+    min-height: 140vh;
+    padding-bottom: 350px;
   }
 }
 
 @media (max-width: 768px) {
-  .background-wrapper {
-    border-radius: 0;
-    margin: 0;
-    min-height: 100vh;
-    padding: 16px;
-    box-shadow: none;
-    justify-content: flex-start;
-    align-items: stretch;
+  .main-content-wrapper {
+    min-height: 130vh;
+    padding-bottom: 300px;
   }
 }
 
@@ -383,4 +381,27 @@
   border-top: 7px solid transparent;
   border-bottom: 7px solid transparent;
   border-left: 14px solid #000;
+}
+/* 粘性页脚 - 固定在视口底部，从底部滑出 */
+.sticky-footer-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  background: white;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.12);
+}
+
+/* 当滚动到一定位置时，footer 滑出 */
+.sticky-footer-wrapper.visible {
+  transform: translateY(0);
+}
+
+/* Footer 本身的样式 */
+footer {
+  position: relative;
+  background: white;
 }
