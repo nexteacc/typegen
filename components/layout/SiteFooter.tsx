@@ -21,12 +21,12 @@ export function SiteFooter() {
           </a>
         </div>
 
-        {/* TYPE ★ GEN 品牌标识 - 保持原始大小 */}
+        {/* TYPE ★ GEN 品牌标识 - BBH Sans Bartle 字体 */}
         <div className="flex w-full items-center">
-          <span className="flex-shrink-0 text-[72px] font-medium tracking-[0.35em] text-gray-900">
+          <span className="bbh-sans-bartle flex-shrink-0 text-[56px] font-semibold tracking-[0.35em] text-gray-900">
             TYPE
           </span>
-          <div className="mx-20 flex flex-1 items-center">
+          <div className="mx-16 flex flex-1 items-center">
             <span className="footer-arrow" aria-hidden="true" />
             <Image
               src="/Star 1.svg"
@@ -37,7 +37,7 @@ export function SiteFooter() {
               priority
             />
           </div>
-          <span className="flex-shrink-0 text-[72px] font-medium tracking-[0.35em] text-gray-900">
+          <span className="bbh-sans-bartle flex-shrink-0 text-[56px] font-semibold tracking-[0.35em] text-gray-900">
             GEN
           </span>
         </div>

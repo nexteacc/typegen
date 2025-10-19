@@ -57,27 +57,27 @@ export function NavBar({
   if (!items.length) return null
 
 const sizeClasses: Record<NavBarSize, string> = {
-  sm: "px-4 py-1.5",
-  md: "px-5 py-2",
-  lg: "px-6 py-2.5",
+  sm: "px-3 py-1",
+  md: "px-4 py-1.5",
+  lg: "px-5 py-2",
 }
 
 const itemSizeClasses: Record<NavBarSize, string> = {
-  sm: "px-2 py-1",
-  md: "px-3 py-1.5",
-  lg: "px-4 py-2",
+  sm: "px-2 py-0.5",
+  md: "px-2.5 py-1",
+  lg: "px-3 py-1.5",
 }
 
 const emojiSizeClasses: Record<NavBarSize, string> = {
-  sm: "text-lg",
-    md: "text-xl",
-    lg: "text-2xl",
+  sm: "text-base",
+    md: "text-lg",
+    lg: "text-xl",
   }
 
   const labelSizeClasses: Record<NavBarSize, string> = {
-    sm: "text-[10px]",
-    md: "text-[11px]",
-    lg: "text-xs",
+    sm: "text-sm",
+    md: "text-base",
+    lg: "text-lg",
   }
 
   const wrapperClassName = cn(
