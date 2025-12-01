@@ -25,7 +25,6 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
     showResultActions,
     targetLength,
     isTextTooLong,
-    isExpanding,
     onTextChange,
     onDragOver,
     onDragLeave,
@@ -51,8 +50,8 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
       >
         <div
           className={cn(
-            "relative mx-auto transition-all duration-500",
-            state === "transformed" ? "max-w-[1500px]" : "max-w-[680px]"
+            "relative mx-auto w-full transition-all duration-500",
+            state === "transformed" ? "max-w-[1400px]" : "max-w-[680px]"
           )}
         >
           <AnimatePresence mode="wait" initial={false}>
@@ -156,117 +155,87 @@ export function DesktopLayout({ controller }: DesktopLayoutProps) {
               <motion.div
                 key="result"
                 layout
-                initial={{ opacity: 0, scale: 0.95, y: 32 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.97, y: 24 }}
-                transition={{ type: 'spring', stiffness: 160, damping: 18 }}
-                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 24 }}
+                transition={{ type: 'spring', stiffness: 180, damping: 22 }}
+                className="flex w-full flex-col items-center"
               >
-                <motion.div
-                  layout
-                  className="relative mb-4 flex w-full justify-center"
-                >
+                {/* 双栏对比布局 */}
+                <div className="flex w-full items-stretch gap-6">
+                  {/* 原文区 */}
                   <motion.div
-                    layout
-                    initial={{ width: 680 }}
-                    animate={{ width: isExpanding ? 1420 : 1420 }}
-                    transition={{
-                      type: 'spring',
-                      stiffness: isExpanding ? 120 : 220,
-                      damping: isExpanding ? 18 : 26,
-                      duration: isExpanding ? 0.6 : 0.2
-                    }}
-                    className="h-[8px] rounded-full bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-300 shadow-[0_0_40px_rgba(56,189,248,0.35)]"
-                  />
-                </motion.div>
-                <div className="flex flex-nowrap items-stretch justify-center gap-6 lg:gap-8">
-                  <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.08, type: 'spring', stiffness: 180, damping: 20 }}
-                    className="flex w-full max-w-[680px] flex-col flex-shrink-0"
+                    initial={{ opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="flex w-[calc(50%-2rem)] flex-col"
                   >
-                    <div className="mb-4 text-center text-sm font-medium text-gray-500">
+                    <div className="mb-3 text-center text-sm font-medium text-gray-400">
                       {t('originalText')}
                     </div>
-                    <motion.div
-                      layout
-                      className={cn(
-                        "w-full bg-gray-50 p-5",
-                        "border-2 border-gray-200 transition-all duration-300 container-rounded"
-                      )}
-                      initial={{ opacity: 0, scale: 0.96 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.12, type: 'spring', stiffness: 220, damping: 22 }}
-                      style={{ borderRadius: '20px', height: '360px', width: '680px', maxWidth: '100%' }}
-                    >
+                    <div className="h-[360px] rounded-2xl border border-gray-200 bg-white p-5">
                       <textarea
-                        className="h-full w-full border-none bg-transparent input-rounded resize-none text-left text-base text-gray-600 outline-none"
-                        style={{ borderRadius: '16px' }}
+                        className="h-full w-full resize-none border-none bg-transparent text-base text-gray-600 outline-none"
                         value={originalText}
                         readOnly
                       />
-                    </motion.div>
+                    </div>
                   </motion.div>
 
+                  {/* 箭头指示 */}
                   <motion.div
-                    layout
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ delay: 0.1, type: 'spring', stiffness: 240, damping: 16 }}
-                    className="hidden h-[360px] w-10 flex-shrink-0 items-center justify-center sm:flex md:w-12"
+                    transition={{ delay: 0.15 }}
+                    className="flex w-12 items-center justify-center"
                   >
-                    <div className="text-4xl text-green-500 animate-pulse">→</div>
+                    <div className="text-3xl text-gray-300">→</div>
                   </motion.div>
 
+                  {/* 结果区 */}
                   <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.18, type: 'spring', stiffness: 180, damping: 20 }}
-                    className="flex w-full max-w-[680px] flex-col flex-shrink-0"
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="flex w-[calc(50%-2rem)] flex-col"
                   >
-                    <div className="mb-4 text-center text-sm font-medium text-green-600">
-                      {t('transformedResult')} ({selectedFilter?.name})
+                    <div className="mb-3 text-center text-sm font-medium text-gray-600">
+                      {t('transformedResult')} <span className="text-gray-400">({selectedFilter?.name})</span>
                     </div>
-                    <motion.div
-                      layout
-                      className={cn(
-                        "w-full bg-transparent p-5",
-                        "border-2 border-solid border-green-500 shadow-glow container-rounded"
-                      )}
-                      initial={{ opacity: 0, scale: 0.92 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.22, type: 'spring', stiffness: 240, damping: 19 }}
-                      style={{ borderRadius: '20px', height: '360px', width: '680px', maxWidth: '100%' }}
-                    >
+                    <div className="h-[360px] rounded-2xl border-2 border-blue-500 bg-white p-5">
                       <textarea
-                        className="h-full w-full border-none bg-transparent input-rounded resize-none text-left text-base outline-none"
-                        style={{ borderRadius: '16px' }}
+                        className="h-full w-full resize-none border-none bg-transparent text-base text-gray-800 outline-none"
                         value={text}
                         readOnly
                       />
-                    </motion.div>
+                    </div>
                   </motion.div>
                 </div>
 
+                {/* 操作按钮 - 统一灰色调 */}
                 {showResultActions && (
                   <motion.div
-                    layout
-                    initial={{ opacity: 0, y: 16 }}
+                    initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 16 }}
-                    transition={{ delay: 0.26, type: 'spring', stiffness: 200, damping: 20 }}
-                    className="mt-8 flex flex-wrap justify-center gap-4"
+                    transition={{ delay: 0.3 }}
+                    className="mt-8 flex flex-wrap justify-center gap-3"
                   >
-                    <button onClick={onCopyText} className="rounded-lg bg-blue-500 px-6 py-3 text-base text-white transition-colors hover:bg-blue-600">
+                    <button
+                      onClick={onCopyText}
+                      className="rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                    >
                       {t('copyText')}
                     </button>
-                    <button onClick={onTryOtherStyle} className="rounded-lg bg-green-500 px-6 py-3 text-base text-white transition-colors hover:bg-green-600">
+                    <button
+                      onClick={onTryOtherStyle}
+                      className="rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                    >
                       {t('tryOtherStyle')}
                     </button>
-                    <button onClick={onRestart} className="rounded-lg bg-gray-500 px-6 py-3 text-base text-white transition-colors hover:bg-gray-600">
+                    <button
+                      onClick={onRestart}
+                      className="rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                    >
                       {t('restart')}
                     </button>
                   </motion.div>
